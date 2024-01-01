@@ -11,13 +11,13 @@ def cli() -> None:
 
 
 def io_params(f: Callable) -> Callable:
-    f = click.argument("source_fh", type=click.Path("r"))(f)
+    f = click.argument("source_fh", type=str)(f)
     return f
 
 
 @cli.command()
 @io_params
-def hathi(source_fh: click.Path) -> None:
+def hathi(source_fh: str) -> None:
     """
     Run analyzis of the reports and create actionable data.
     """

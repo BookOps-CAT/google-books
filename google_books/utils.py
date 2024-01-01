@@ -1,3 +1,4 @@
+from pathlib import Path
 import csv
 
 import click
@@ -25,12 +26,14 @@ def save2csv(dst_fh, row):
             pass
 
 
-def report_name_base(fh: str) -> str:
+def report_name_base(fh: Path) -> str:
     """Creates base name for analysis report files"""
-    err_msg = "The name of the file to be parsed is invalid. Correct pattern: 'nyp_YYYYMMDD_google'."
+    err_msg = (
+        "The name of the file to be parsed is invalid. "
+        "Correct pattern: 'nyp_YYYYMMDD_google'."
+    )
     try:
         fh_str = click.format_filename(fh)
-        print(fh_str)
         fh_date = fh_str.split("_")[1]
     except IndexError:
         raise ValueError(err_msg)

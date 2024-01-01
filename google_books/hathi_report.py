@@ -1,5 +1,3 @@
-from pathlib import Path
-
 from google_books.utils import save2csv, report_name_base
 
 
