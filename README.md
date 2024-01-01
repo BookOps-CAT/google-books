@@ -17,3 +17,5 @@ https://catalog.hathitrust.org/Record/100405490
   + Confirmed, these are not being ingested and must be corrected - OCLC info provided in 001/003/035
 + ~~For Hathi, does it matter if OCLC # is in the first 035?~~
   + It appears it does not matter
++ Zephir gives the following submission warning: WARNING: -d nyp_20231208_google run option is not YYYYMMDD: using 20231208 . Is this relevant? Submissions are getting processed and we follow the file name convention specified in the docs.
++ Zephir gives the following submission warning: WARNING: using namespace nyp for NUC code in 852. What is this about?
