@@ -1,0 +1,25 @@
+[tool.poetry]
+name = "google-books"
+version = "0.1.0"
+description = "Scripts supporting Google Books / Hathi Trust metadata ingests from NYPL"
+authors = ["Tomek Kalata <klingaroo@gmail.com>"]
+license = "MIT"
+readme = "README.md"
+
+[tool.setuptools.packages.find]
+where = ["google-books"]
+
+[tool.poetry.dependencies]
+python = "^3.12"
+pymarc = "^5.1.0"
+click = "^8.1.7"
+
+[tool.poetry.group.dev.dependencies]
+pytest = "^7.4.4"
+
+[tool.poetry.scripts]
+google-books = "google_books:main"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
