@@ -253,4 +253,4 @@ dmypy.json
 
 # local setup
 venvcmd.sh
-
+temp*.*
