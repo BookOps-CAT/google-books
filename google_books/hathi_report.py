@@ -33,7 +33,7 @@ def parse_report(fh: str) -> None:
                 bibno = find_bibno(line)
                 if "OCLC number found in unspecifed 035$" in line:
                     save2csv(
-                        f"files/out/hathi-{fh_date}-unspecified-oclc.cvs",
+                        f"files/out/hathi-{fh_date}-unspecified-oclc.csv",
                         [bibno],
                     )
                 elif "no OCLC number in record" in line:
