@@ -1,4 +1,4 @@
-Scripts to support submission and reconciliation of metadata in the Google Books/Hathi Trust project.
+Scripts to support submission and reconciliation of metadata for the Google Books/Hathi Trust project.
 
 ### HathiTrust
 #### Catalog Record URL
