@@ -2,7 +2,7 @@ from contextlib import nullcontext as does_not_raise
 import pytest
 
 
-from src.hathi_report import report_name_base
+from google_books.utils import report_name_base
 
 
 @pytest.mark.parametrize(

@@ -1,4 +1,4 @@
-from src.hathi_report import parse_report as hathi_report
+from google_books.hathi_report import parse_report as hathi_report
 
 
 if __name__ == "__main__":

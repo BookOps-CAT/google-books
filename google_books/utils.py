@@ -1,5 +1,7 @@
 import csv
 
+import click
+
 
 def save2csv(dst_fh, row):
     """
@@ -21,3 +23,17 @@ def save2csv(dst_fh, row):
             out.writerow(row)
         except UnicodeEncodeError:
             pass
+
+
+def report_name_base(fh: str) -> str:
+    """Creates base name for analysis report files"""
+    err_msg = "The name of the file to be parsed is invalid. Correct pattern: 'nyp_YYYYMMDD_google'."
+    try:
+        fh_str = click.format_filename(fh)
+        print(fh_str)
+        fh_date = fh_str.split("_")[1]
+    except IndexError:
+        raise ValueError(err_msg)
+    if not fh_date.isdigit():
+        raise ValueError(err_msg)
+    return fh_date
