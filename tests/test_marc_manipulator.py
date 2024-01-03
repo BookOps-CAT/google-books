@@ -1,8 +1,8 @@
 import pytest
 
-from pymarc import Field, Subfield
+from pymarc import Record, Field, Subfield
 
-from google_books.marc_manipulator import find_oclcno
+from google_books.marc_manipulator import find_oclcno, fix_oclc_info, get_bibs
 
 
 @pytest.mark.parametrize("arg,expectation", [("(OCoLC)1234", "1234"), ("1234", None)])
@@ -56,3 +56,36 @@ def test_find_oclcno_invlid_oclcno_in_991(stub_bib):
     with pytest.warns(UserWarning) as wrn:
         find_oclcno(stub_bib)
     assert "Encountered invalid OCLC #: a1234." in str(wrn[-1].message)
+
+
+def test_fix_oclc_info_warning_no_oclcno_found(stub_bib):
+    with pytest.warns(UserWarning) as wrn:
+        fix_oclc_info(stub_bib)
+
+    assert (
+        "Unable to manipulate bib (.b00000001). No suitable OCLC # was found in bib."
+        in str(wrn[-1].message)
+    )
+
+
+def test_fix_oclc_info_success(stub_bib):
+    stub_bib.add_field(
+        Field(
+            tag="035", indicators=[" ", " "], subfields=[Subfield("a", "(OCoLC)1234")]
+        )
+    )
+    stub_bib.add_field(
+        Field(tag="991", indicators=[" ", " "], subfields=[Subfield("y", "1234")])
+    )
+    fix_oclc_info(stub_bib)
+
+    assert str(stub_bib["001"]) == "=001  1234"
+    assert str(stub_bib["003"]) == "=003  OCoLC"
+    assert "991" not in stub_bib
+
+
+def test_get_bibs_yield_record_sequence_in_file():
+    reader = get_bibs("tests/sample-rlin-bibs.mrc")
+    n, bib = next(reader)
+    assert n == 1
+    assert isinstance(bib, Record)
