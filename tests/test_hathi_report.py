@@ -1,7 +1,7 @@
 import pytest
 
 
-from google_books.utils import report_name_base
+from google_books.utils import fh_date
 
 
 @pytest.mark.parametrize(
@@ -12,7 +12,7 @@ from google_books.utils import report_name_base
     ],
 )
 def test_report_name_base_valid(arg, expectation):
-    assert report_name_base(arg) == expectation
+    assert fh_date(arg) == expectation
 
 
 @pytest.mark.parametrize(
@@ -21,4 +21,4 @@ def test_report_name_base_valid(arg, expectation):
 )
 def test_report_name_base_invalid(arg):
     with pytest.raises(ValueError):
-        report_name_base(arg)
+        fh_date(arg)
