@@ -55,7 +55,7 @@ def find_oclcno(bib: Record) -> Optional[str]:
     return None
 
 
-def fix_oclc_info(bib: Record) -> str:
+def fix_oclc_info(bib: Record) -> Optional[str]:
     """
     Manipulates given MARC record to enforce OCLC data in 001/003/035
     based on present 035 or 991 with OCLC identifier.
@@ -63,11 +63,13 @@ def fix_oclc_info(bib: Record) -> str:
     oclcno = find_oclcno(bib)
     bibno = bib["907"]["a"]
     if oclcno:
-        bib.remove_fields("001", "003", "991")
+        bib.remove_fields("001", "003", "991", "997", "959", "998", "910")
         bib.add_ordered_field(Field(tag="001", data=oclcno))
         bib.add_ordered_field(Field(tag="003", data="OCoLC"))
+
         return f"Processed bib {bibno}"
     else:
         warnings.warn(
             f"Unable to manipulate bib ({bibno}). No suitable OCLC # was found in bib."
         )
+        return None

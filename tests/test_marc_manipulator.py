@@ -77,11 +77,23 @@ def test_fix_oclc_info_success(stub_bib):
     stub_bib.add_field(
         Field(tag="991", indicators=[" ", " "], subfields=[Subfield("y", "1234")])
     )
+    stub_bib.add_field(
+        Field(tag="997", indicators=[" ", " "], subfields=[Subfield("a", "foo")])
+    )
+    stub_bib.add_field(
+        Field(tag="959", indicators=[" ", " "], subfields=[Subfield("a", "bar")])
+    )
+    stub_bib.add_field(
+        Field(tag="910", indicators=[" ", " "], subfields=[Subfield("a", "RL")])
+    )
     fix_oclc_info(stub_bib)
 
     assert str(stub_bib["001"]) == "=001  1234"
     assert str(stub_bib["003"]) == "=003  OCoLC"
     assert "991" not in stub_bib
+    assert "997" not in stub_bib
+    assert "959" not in stub_bib
+    assert "910" not in stub_bib
 
 
 def test_get_bibs_yield_record_sequence_in_file():
