@@ -14,4 +14,7 @@ def stub_bib():
             subfields=[Subfield("a", "(WaOLN)nyp1235")],
         )
     )
+    bib.add_field(
+        Field(tag="907", indicators=[" ", " "], subfields=[Subfield("a", ".b00000001")])
+    )
     return bib
