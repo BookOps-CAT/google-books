@@ -71,7 +71,7 @@ def fix_oclc_info(bib: Record) -> Optional[str]:
         bib.add_ordered_field(
             Field(tag="945", indicators=[" ", " "], subfields=[Subfield("a", bibno)])
         )
-        bib.add_ordere_field(
+        bib.add_ordered_field(
             Field(
                 tag="949", indicators=[" ", " "], subfields=[Subfield("a", "*bn=xxx;")]
             )
