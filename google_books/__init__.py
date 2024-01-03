@@ -19,7 +19,8 @@ def io_params(f: Callable) -> Callable:
 @io_params
 def hathi(source_fh: str) -> None:
     """
-    Run analyzis of the reports and create actionable data.
+    Run analysis of the HathiTrust/Zephir reports and create actionable data.
+    Outputs reports to out/ directory.
     """
     hathi_report(source_fh)
 
