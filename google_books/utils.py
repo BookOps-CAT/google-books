@@ -26,7 +26,7 @@ def save2csv(dst_fh, row):
             pass
 
 
-def report_name_base(fh: Path) -> str:
+def fh_date(fh: Path) -> str:
     """Creates base name for analysis report files"""
     err_msg = (
         "The name of the file to be parsed is invalid. "
