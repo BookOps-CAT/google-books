@@ -90,6 +90,7 @@ def test_fix_oclc_info_success(stub_bib):
 
     assert str(stub_bib["001"]) == "=001  1234"
     assert str(stub_bib["003"]) == "=003  OCoLC"
+    assert str(stub_bib["945"]) == "=945  \\\\$a.b00000001"
     assert "991" not in stub_bib
     assert "997" not in stub_bib
     assert "959" not in stub_bib

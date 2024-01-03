@@ -2,7 +2,7 @@ from collections.abc import Generator
 from typing import Optional
 import warnings
 
-from pymarc import MARCReader, Record, Field
+from pymarc import MARCReader, Record, Field, Subfield
 
 from google_books.utils import fh_date
 
@@ -63,9 +63,19 @@ def fix_oclc_info(bib: Record) -> Optional[str]:
     oclcno = find_oclcno(bib)
     bibno = bib["907"]["a"]
     if oclcno:
-        bib.remove_fields("001", "003", "991", "997", "959", "998", "910")
+        bib.remove_fields(
+            "001", "003", "852", "907", "910", "945", "949", "991", "997", "959", "998"
+        )
         bib.add_ordered_field(Field(tag="001", data=oclcno))
         bib.add_ordered_field(Field(tag="003", data="OCoLC"))
+        bib.add_ordered_field(
+            Field(tag="945", indicators=[" ", " "], subfields=[Subfield("a", bibno)])
+        )
+        bib.add_ordere_field(
+            Field(
+                tag="949", indicators=[" ", " "], subfields=[Subfield("a", "*bn=xxx;")]
+            )
+        )
 
         return f"Processed bib {bibno}"
     else:
