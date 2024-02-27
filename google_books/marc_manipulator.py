@@ -1,5 +1,4 @@
-from collections.abc import Generator
-from typing import Optional
+from typing import Optional, Iterator
 import warnings
 
 from pymarc import MARCReader, Record, Field, Subfield
@@ -23,7 +22,7 @@ def manipulate_records(source_fh: str) -> None:
             print(f"{msg} (record {n})")
 
 
-def get_bibs(source_fh: str) -> Generator[Record, None, None]:
+def get_bibs(source_fh: str) -> Iterator[tuple[int, Record]]:
     with open(source_fh, "rb") as marcfile:
         reader = MARCReader(marcfile, hide_utf8_warnings=True)
         for n, bib in enumerate(reader, start=1):
