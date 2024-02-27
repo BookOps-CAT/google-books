@@ -4,6 +4,7 @@ import click
 
 from google_books.hathi_report import parse_report as hathi_report
 from google_books.marc_manipulator import manipulate_records as fix_oclc_data
+from google_books.manifest import prep_recap_manifest_for_sierra_list
 
 
 @click.group()
@@ -34,6 +35,16 @@ def oclc(source_fh: str) -> None:
     Outputs manipulated file to files/out/ directory
     """
     fix_oclc_data(source_fh)
+
+
+@cli.command()
+@io_params
+def recap_manifest(source_fh: str) -> None:
+    """
+    Preps ReCAP manifest for Sierra list creation
+    """
+    out = prep_recap_manifest_for_sierra_list(source_fh)
+    click.echo(f"Cleaned up manifest was saved to {out.resolve()}")
 
 
 def main() -> None:
