@@ -33,6 +33,7 @@ jobs:
           paralle: true
           flag-name: Unit Test
           github-token: ${{ secrets.GITHUB_TOKEN}}
+
   coveralls_finish:
     needs: test
     runs-on: ubuntu-latest
@@ -41,3 +42,6 @@ jobs:
         uses: AndreMiras/coveralls-python-action@develop
         with:
           parallel-finished: true
+
+  formatter:
+    run: poetry run black --check google_books/ tests/
