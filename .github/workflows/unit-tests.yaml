@@ -44,7 +44,7 @@ jobs:
           parallel-finished: true
 
   black_formatter:
-    needs: tests
+    needs: test
     runs-on: ubuntu-latest
     steps:
       - name: Run black formatting
