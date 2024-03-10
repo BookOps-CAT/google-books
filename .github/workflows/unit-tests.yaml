@@ -34,6 +34,9 @@ jobs:
           flag-name: Unit Test
           github-token: ${{ secrets.GITHUB_TOKEN}}
 
+      - name: Run black formatting
+        run: poetry run black --check google_books/ tests/
+
   coveralls_finish:
     needs: test
     runs-on: ubuntu-latest
@@ -42,10 +45,3 @@ jobs:
         uses: AndreMiras/coveralls-python-action@develop
         with:
           parallel-finished: true
-
-  black_formatter:
-    needs: test
-    runs-on: ubuntu-latest
-    steps:
-      - name: Run black formatting
-        run: poetry run black --check google_books/ tests/
