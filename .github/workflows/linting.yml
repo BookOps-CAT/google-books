@@ -12,7 +12,7 @@ jobs:
           - uses: py-actions/flake8@v2
             with:
               ignore: "tests/*:E501, W503"
-              max-line-lenght: 88
+              max-line-length: 88
               path: "google_books/ tests/"
 
   black_formatter:
