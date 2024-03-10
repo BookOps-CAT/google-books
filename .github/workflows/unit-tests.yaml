@@ -43,5 +43,7 @@ jobs:
         with:
           parallel-finished: true
 
-  formatter:
-    run: poetry run black --check google_books/ tests/
+  black_formatter:
+    steps:
+      - name: Run black formatting
+        run: poetry run black --check google_books/ tests/
