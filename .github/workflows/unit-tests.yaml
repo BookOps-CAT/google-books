@@ -49,7 +49,7 @@ jobs:
       runs-on: ubuntu-latest
       steps:
         uses: psf/black@stable
-          with:
-            options: "--check --verbose"
-            src: ["google_books/", "tests/"]
+        with:
+          options: "--check --verbose"
+          src: ["google_books/", "tests/"]
 
