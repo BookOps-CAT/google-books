@@ -1,11 +1,15 @@
+[![Build Status](https://github.com/BookOps-CAT/google-books/actions/workflows/unit-tests.yaml/badge.svg?branch=main)](https://github.com/BookOps-CAT/google-books/actions) [![Coverage Status](https://coveralls.io/repos/github/BookOps-CAT/google-books/badge.svg?branch=main)](https://coveralls.io/github/BookOps-CAT/google-books?branch=main) [![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
+
 Scripts to support submission and reconciliation of metadata for the Google Books/Hathi Trust project.
 
 ### HathiTrust
 #### Catalog Record URL
 https://catalog.hathitrust.org/Record/[cid]
+https://babel.hathitrust.org/cgi/pt?id=nyp.[barcode]
 
 example:
 https://catalog.hathitrust.org/Record/100405490
+https://babel.hathitrust.org/cgi/pt?id=nyp.33433105117174
 
 
 ### Questions
