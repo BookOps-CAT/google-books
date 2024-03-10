@@ -23,6 +23,9 @@ pytest-cov = "^4.1.0"
 [tool.poetry.scripts]
 google-books = "google_books:main"
 
+[tool.coverage.run]
+relative_files = true
+
 [build-system]
 requires = ["poetry-core"]
 build-backend = "poetry.core.masonry.api"
