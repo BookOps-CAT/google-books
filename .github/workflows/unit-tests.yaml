@@ -30,7 +30,7 @@ jobs:
       - name: Send report to Coveralls
         uses: AndreMiras/coveralls-python-action@develop
         with:
-          paralle: true
+          parallel: true
           flag-name: Unit Test
           github-token: ${{ secrets.GITHUB_TOKEN}}
 
