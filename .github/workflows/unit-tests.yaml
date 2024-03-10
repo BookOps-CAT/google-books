@@ -44,6 +44,8 @@ jobs:
           parallel-finished: true
 
   black_formatter:
+    needs: tests
+    runs-on: ubuntu-latest
     steps:
       - name: Run black formatting
         run: poetry run black --check google_books/ tests/
