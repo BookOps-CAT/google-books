@@ -43,13 +43,12 @@ jobs:
         with:
           parallel-finished: true
 
-  black_formatter:
-    lint:
-      needs: tests
-      runs-on: ubuntu-latest
-      steps:
-        uses: psf/black@stable
-        with:
-          options: "--check --verbose"
-          src: ["google_books/", "tests/"]
-
+  lint:
+    needs: tests
+    runs-on: ubuntu-latest
+    steps:
+      uses: actions/checkout@v4
+      uses: psf/black@stable
+      with:
+        options: "--check --verbose"
+        src: ["google_books/", "tests/"]
