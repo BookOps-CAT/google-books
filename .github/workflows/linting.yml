@@ -1,20 +1,6 @@
 name: lint
 on: [push, pull_request]
 jobs:
-  flake8:
-      runs-on: ubuntu-latest
-      steps:
-          - uses: actions/checkout@v4
-          - uses: actions/setup-python@v5
-            with:
-              python-version: "3.12"
-
-          - uses: py-actions/flake8@v2
-            with:
-              ignore: "tests/*:E501, W503"
-              max-line-length: 88
-              path: "google_books"
-
   black_formatter:
     runs-on: ubuntu-latest
     steps:
