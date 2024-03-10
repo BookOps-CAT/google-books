@@ -8,4 +8,4 @@ jobs:
       - uses: psf/black@stable
         with:
           options: "--check --verbose"
-          src: ["google_books/", "tests/"]
+          src: "google_books/ tests/"
