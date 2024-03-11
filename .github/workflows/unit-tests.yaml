@@ -28,7 +28,7 @@ jobs:
         run: poetry run black . --check --color --verbose
 
       - name: Run flake8 linting
-        run: poetry run flake8 -v --count --max-line-length=88 --ignore=tests/*:E501,W503 google_books/
+        run: poetry run flake8 -v --max-line-length=88 --ignore=tests/*:E501,W503 google_books/
 
       - name: Run tests
         run: poetry run pytest -v --cov=google_books/
