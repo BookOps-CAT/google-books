@@ -30,6 +30,12 @@ jobs:
             options: "--check --verbose"
             src: "google_books/ tests/"
 
+      - name: Run flake8 linting
+        uses: py-actions/flake8@v2
+        with:
+          max-line-length: 88
+          ignore: "tests/*: E501, W503"
+
       - name: Run tests
         run: poetry run pytest -v --cov=google_books/
 
