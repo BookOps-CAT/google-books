@@ -36,7 +36,7 @@ jobs:
           max-line-length: 88
           ignore: "tests/*:E501,W503"
           path: "google_books/"
-          args: "-v --color --count"
+          args: "-v --count"
 
       - name: Run tests
         run: poetry run pytest -v --cov=google_books/
