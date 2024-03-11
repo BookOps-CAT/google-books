@@ -28,6 +28,10 @@ google-books = "google_books:main"
 [tool.coverage.run]
 relative_files = true
 
+[tool.black]
+target-version = ["py312"]
+line-length = 88
+
 [build-system]
 requires = ["poetry-core"]
 build-backend = "poetry.core.masonry.api"
