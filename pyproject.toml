@@ -20,6 +20,7 @@ pydantic = "^2.6.3"
 pytest = "^8.1.1"
 pytest-cov = "^4.1.0"
 black = "^24.2.0"
+flake8 = "^7.0.0"
 
 [tool.poetry.scripts]
 google-books = "google_books:main"
