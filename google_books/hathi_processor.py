@@ -84,9 +84,14 @@ def clean_metadata_for_hathi_submission(
 
     bibs2keep = []
     for bib in bibs:
-        barcode = bib.get("945").get("i").strip()
-        if barcode not in rejected_barcodes:
-            bibs2keep.append(bib)
+        # print(bib)
+        for field in bib.get_fields("945"):
+            try:
+                barcode = field.get("i").strip()
+                if barcode not in rejected_barcodes:
+                    bibs2keep.append(bib)
+            except AttributeError:
+                continue
 
     save2marcxml(out, bibs2keep)
 
@@ -94,5 +99,5 @@ def clean_metadata_for_hathi_submission(
 if __name__ == "__main__":
     import sys
 
-    print(sys.argv[1])
+    # print(sys.argv[1])
     clean_metadata_for_hathi_submission(sys.argv[1], sys.argv[2], sys.argv[3])
