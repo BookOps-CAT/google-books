@@ -2,7 +2,12 @@ import pytest
 
 from pymarc import Record, Field, Subfield
 
-from google_books.marc_manipulator import find_oclcno, fix_oclc_info, get_bibs
+from google_books.marc_manipulator import (
+    find_oclcno,
+    fix_oclc_info,
+    get_bibs,
+    marcxml_reader,
+)
 
 
 @pytest.mark.parametrize("arg,expectation", [("(OCoLC)1234", "1234"), ("1234", None)])
@@ -103,3 +108,11 @@ def test_get_bibs_yield_record_sequence_in_file():
     n, bib = next(reader)
     assert n == 1
     assert isinstance(bib, Record)
+
+
+def test_marcxml_reader():
+    test_file = "tests/marcxml-sample.xml"
+    bibs = marcxml_reader(test_file)
+    for n, bib in enumerate(bibs):  # n starts with 0!
+        assert isinstance(bib, Record)
+    assert n == 1

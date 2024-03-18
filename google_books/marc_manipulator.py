@@ -1,7 +1,7 @@
 from typing import Optional, Iterator
 import warnings
 
-from pymarc import MARCReader, Record, Field, Subfield
+from pymarc import MARCReader, Record, Field, Subfield, XMLWriter, parse_xml_to_array
 
 from google_books.utils import fh_date
 
@@ -82,3 +82,16 @@ def fix_oclc_info(bib: Record) -> Optional[str]:
             f"Unable to manipulate bib ({bibno}). No suitable OCLC # was found in bib."
         )
         return None
+
+
+def marcxml_reader(fh: str) -> Iterator[Record]:
+    reader = parse_xml_to_array(fh)
+    for bib in reader:
+        yield bib
+
+
+def save2marcxml(fh: str, bibs: list[Record]) -> None:
+    writer = XMLWriter(open(fh, "ab"))
+    for bib in bibs:
+        writer.write(bib)
+    writer.close()
