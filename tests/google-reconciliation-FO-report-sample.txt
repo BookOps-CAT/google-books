@@ -1,0 +1,3 @@
+Total Foldouts Scanned: 2860
+33433004338053,119166164-44,MaterialNotScannable
+33433004727081,119167621-12,MaterialNotScannable
