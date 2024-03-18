@@ -2,9 +2,12 @@ from collections.abc import Callable
 
 import click
 
-from google_books.hathi_report import parse_report as hathi_report
+from google_books.hathi_processor import (
+    parse_hathi_processing_report,
+    clean_metadata_for_hathi_submission,
+)
 from google_books.marc_manipulator import manipulate_records as fix_oclc_data
-from google_books.manifest import prep_recap_manifest_for_sierra_list
+from google_books.recap_manifest import prep_recap_manifest_for_sierra_list
 
 
 @click.group()
@@ -19,12 +22,27 @@ def io_params(f: Callable) -> Callable:
 
 @cli.command()
 @io_params
-def hathi(source_fh: str) -> None:
+def hathi_report(source_fh: str) -> None:
     """
     Run analysis of the HathiTrust/Zephir reports and create actionable data.
     Outputs reports to files/out/ directory.
     """
-    hathi_report(source_fh)
+    parse_hathi_processing_report(source_fh)
+
+
+@cli.command()
+@io_params
+def hathi_metadata_prep(src_metadata: str, google_report: str, out: str):
+    """
+    Preps HathiTrust MARCXML file using Google FO reconciliation report by removing from
+    it records/items that have not been digitized.
+
+    Args:
+        src_metadata:           MARCXML file used for Google submission
+        google_report:          Google FO reconciliation report
+        out:                    path to output MARXML file
+    """
+    clean_metadata_for_hathi_submission(src_metadata, google_report, out)
 
 
 @cli.command()
