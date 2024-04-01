@@ -90,8 +90,8 @@ def marcxml_reader(fh: str) -> Iterator[Record]:
         yield bib
 
 
-def save2marcxml(fh: str, bibs: list[Record]) -> None:
-    writer = XMLWriter(open(fh, "ab"))
+def save2marcxml(marcxml: str, bibs: list[Record]) -> None:
+    writer = XMLWriter(open(marcxml, "ab"))
     for bib in bibs:
         writer.write(bib)
     writer.close()

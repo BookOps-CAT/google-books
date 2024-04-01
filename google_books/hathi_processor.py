@@ -37,7 +37,7 @@ def parse_hathi_processing_report(fh: str) -> None:
                 save2csv(f"files/out/hathi-{date}-success.csv", [cid])
             elif line.startswith("WARNING: .b"):
                 bibno = find_bibno(line)
-                if "OCLC number found in unspecifed 035$" in line:
+                if "OCLC number found in unspecified 035$" in line:
                     save2csv(
                         f"files/out/hathi-{date}-unspecified-oclc.csv",
                         [bibno],
@@ -69,18 +69,18 @@ def google_reconciliation_to_barcodes_lst(fh: str) -> list[str]:
 
 
 def clean_metadata_for_hathi_submission(
-    metadata_fh: str, reconcile_report_fh: str, out: str
+    marcxml: str, google_report: str, out: str
 ) -> None:
     """
-    Using Google's reconcilation FO report removes from a given metadata file records
-    that include rejected for digitizaiton items (barcodes).
+    Using Google's reconciliation FO report removes from a given metadata file records
+    that include rejected for digitization items (barcodes).
 
     Args:
-        metadata_fh:            path to marcxml file with records
-        reconcile_report_fh:    path to google reconciliation FO report
+        marcxml:            path to marcxml file with records
+        google_report:      path to google reconciliation FO report
     """
-    rejected_barcodes = google_reconciliation_to_barcodes_lst(reconcile_report_fh)
-    bibs = marcxml_reader(metadata_fh)
+    rejected_barcodes = google_reconciliation_to_barcodes_lst(google_report)
+    bibs = marcxml_reader(marcxml)
 
     bibs2keep = []
     for bib in bibs:

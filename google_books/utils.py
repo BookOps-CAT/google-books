@@ -1,4 +1,3 @@
-from pathlib import Path
 import csv
 
 import click
@@ -26,7 +25,7 @@ def save2csv(dst_fh, row):
             pass
 
 
-def fh_date(fh: Path) -> str:
+def fh_date(fh: str) -> str:
     """Creates base name for analysis report files"""
     err_msg = (
         "The name of the file to be parsed is invalid. "
