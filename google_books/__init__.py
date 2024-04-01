@@ -27,9 +27,9 @@ def hathi_report(filename: str) -> None:
 
 
 @cli.command()
-@click.argument("marcxml", envvar="MARCXML", type=click.Path(exists=True))
-@click.argument("google_report", envvar="GOOG-REPORT", type=click.Path(exists=True))
-@click.argument("out", envvar="OUT", type=click.Path())
+@click.argument("marcxml", type=click.Path(exists=True))
+@click.argument("google_report", type=click.Path(exists=True))
+@click.argument("out", type=click.Path())
 def hathi_metadata_prep(marcxml: str, google_report: str, out: str):
     """
     Preps HathiTrust MARCXML file using Google FO reconciliation report by removing from
