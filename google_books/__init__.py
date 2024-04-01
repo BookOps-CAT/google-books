@@ -5,6 +5,7 @@ from google_books.hathi_processor import (
     clean_metadata_for_hathi_submission,
 )
 from google_books.marc_manipulator import manipulate_records as fix_oclc_data
+from google_books.marc_manipulator import create_stub_hathi_records
 from google_books.recap_manifest import prep_recap_manifest_for_sierra_list
 
 
@@ -61,6 +62,17 @@ def recap_manifest(filename: str) -> None:
     """
     out = prep_recap_manifest_for_sierra_list(filename)
     click.echo(f"Cleaned up manifest was saved to {out.resolve()}")
+
+
+@cli.command()
+@click.argument("marcxml", type=click.Path(exists=True))
+@click.argument("out", type=click.Path())
+def hathi_urls(marcxml: str, out: str) -> None:
+    """
+    Creates stub MARC21 records with generated 856 for HathiTrust URLs.
+    """
+    create_stub_hathi_records(marcxml, out)
+    click.echo(f"Stub records with HathiTrust URL have been saved to {out}.")
 
 
 def main() -> None:

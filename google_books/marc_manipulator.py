@@ -84,6 +84,90 @@ def fix_oclc_info(bib: Record) -> Optional[str]:
         return None
 
 
+def generate_hathi_url(
+    bibno: str, barcode: Optional[str], volume: Optional[str]
+) -> Optional[Field]:
+    """
+    Generates the 856 MARC field with HathiTrust URL
+
+    Args:
+        bibno:                  Sierra bib number from 907$a
+        barcode:                NYPL RL barcode
+        volume:                 value of the 945$c
+
+    Returns:
+        `pymarc.Field` instance
+    """
+    subfields = []
+    if isinstance(volume, str):
+        volume = volume.strip()
+
+    if barcode:
+        subfields.append(Subfield("u", f"http://hdl.handle.net/2027/nyp.{barcode}"))
+    else:
+        return None
+
+    if volume:
+        subfields.append(
+            Subfield("z", f"Full text available via HathiTrust--{volume.strip()}")
+        )
+    else:
+        subfields.append(Subfield("z", "Full text available via HathiTrust"))
+
+    return Field(tag="856", indicators=["4", "0"], subfields=subfields)
+
+
+def is_item_field(field: Field) -> bool:
+    """
+    Tests if the field is item 945 field.
+
+    Args:
+        field:                  instance of `pymarc.Field` of the 945 MARC tag
+    """
+    if field.tag != "945":
+        return False
+    else:
+        if field.get("y"):
+            return True
+        else:
+            return False
+
+
+def create_stub_hathi_records(marcxml: str, out: str) -> None:
+    """
+    Creates stub records that include only LDR, 245, 856, & 907 fields.
+    Generates 856 fields with HathiTrust URLs.
+    Args:
+        marcxml:                path to MARCXML file submitted to HathiTrust
+        out:                    path to MARC21 file with output stub records
+    """
+    for bib in marcxml_reader(marcxml):
+
+        # create new stub records
+        stub_bib = Record()
+        stub_bib.leader = bib.leader
+        stub_bib.add_ordered_field(bib.get("245"))
+        stub_bib.add_ordered_field(bib.get("907"))
+
+        bibno = bib.get("907").get("a")  # type: ignore
+        has_item_field = False
+
+        # construct 856s with Hathi URLs
+        for f in bib.get_fields("945"):
+            barcode = f.get("i")
+            volume = f.get("c")
+            t856 = generate_hathi_url(bibno, barcode, volume)
+
+            if t856 and is_item_field(f):
+                has_item_field = True
+                stub_bib.add_ordered_field(t856)
+        if not has_item_field:
+            warnings.warn(f"No barcode in 945 field {bibno}.")
+
+        # output bibs in MARC21 format
+        append2marc(stub_bib, out)
+
+
 def marcxml_reader(fh: str) -> Iterator[Record]:
     reader = parse_xml_to_array(fh)
     for bib in reader:
@@ -95,3 +179,8 @@ def save2marcxml(marcxml: str, bibs: list[Record]) -> None:
     for bib in bibs:
         writer.write(bib)
     writer.close()
+
+
+def append2marc(record: Record, out: str) -> None:
+    with open(out, "ab") as marcfile:
+        marcfile.write(record.as_marc())
