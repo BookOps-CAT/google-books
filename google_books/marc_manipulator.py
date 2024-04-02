@@ -85,7 +85,7 @@ def fix_oclc_info(bib: Record) -> Optional[str]:
 
 
 def generate_hathi_url(
-    bibno: str, barcode: Optional[str], volume: Optional[str]
+    barcode: Optional[str], volume: Optional[str]
 ) -> Optional[Field]:
     """
     Generates the 856 MARC field with HathiTrust URL

@@ -5,6 +5,7 @@ from pymarc import Record, Field, Subfield
 from google_books.marc_manipulator import (
     find_oclcno,
     fix_oclc_info,
+    generate_hathi_url,
     get_bibs,
     is_item_field,
     marcxml_reader,
@@ -102,6 +103,38 @@ def test_fix_oclc_info_success(stub_bib):
     assert "997" not in stub_bib
     assert "959" not in stub_bib
     assert "910" not in stub_bib
+
+
+@pytest.mark.parametrize(
+    "barcode,volume,expectation",
+    [
+        (
+            "33433035453483",
+            None,
+            "33433035453483$zFull text available via HathiTrust",
+        ),
+        (
+            "33433035453483",
+            " ",
+            "33433035453483$zFull text available via HathiTrust",
+        ),
+        (
+            "33433035453483",
+            " vol. 1 ",
+            "33433035453483$zFull text available via HathiTrust--vol. 1",
+        ),
+    ],
+)
+def test_generate_hathi_url_success(barcode, volume, expectation):
+    assert (
+        str(generate_hathi_url(barcode, volume))
+        == f"=856  40$uhttp://hdl.handle.net/2027/nyp.{expectation}"
+    )
+
+
+@pytest.mark.parametrize("barcode,volume", [("", None), (None, None)])
+def test_generate_hathi_url_failure(barcode, volume):
+    assert generate_hathi_url(barcode, volume) is None
 
 
 def test_get_bibs_yield_record_sequence_in_file():
