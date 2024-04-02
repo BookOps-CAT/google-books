@@ -39,7 +39,7 @@ def test_find_oclcno_in_invalid_subfield_of_991(stub_bib):
     assert find_oclcno(stub_bib) is None
 
 
-def test_find_oclcno_invlid_oclcno_in_035(stub_bib):
+def test_find_oclcno_invalid_oclcno_in_035(stub_bib):
     stub_bib.add_field(
         Field(
             tag="035",
@@ -52,7 +52,7 @@ def test_find_oclcno_invlid_oclcno_in_035(stub_bib):
     assert "Encountered invalid OCLC #: nyp1234." in str(wrn[-1].message)
 
 
-def test_find_oclcno_invlid_oclcno_in_991(stub_bib):
+def test_find_oclcno_invalid_oclcno_in_991(stub_bib):
     stub_bib.add_field(
         Field(
             tag="991",

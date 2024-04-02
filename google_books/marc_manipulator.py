@@ -156,7 +156,7 @@ def create_stub_hathi_records(marcxml: str, out: str) -> None:
         for f in bib.get_fields("945"):
             barcode = f.get("i")
             volume = f.get("c")
-            t856 = generate_hathi_url(bibno, barcode, volume)
+            t856 = generate_hathi_url(barcode, volume)
 
             if t856 and is_item_field(f):
                 has_item_field = True
