@@ -6,6 +6,7 @@ from google_books.marc_manipulator import (
     find_oclcno,
     fix_oclc_info,
     get_bibs,
+    is_item_field,
     marcxml_reader,
 )
 
@@ -108,6 +109,19 @@ def test_get_bibs_yield_record_sequence_in_file():
     n, bib = next(reader)
     assert n == 1
     assert isinstance(bib, Record)
+
+
+@pytest.mark.parametrize(
+    "tag,subfields,expectation",
+    [
+        ("900", [Subfield("a", "foo"), Subfield("y", "bar")], False),
+        ("945", [Subfield("a", "foo")], False),
+        ("945", [Subfield("a", "foo"), Subfield("y", "bar")], True),
+    ],
+)
+def test_is_item_field(tag, subfields, expectation):
+    field = Field(tag=tag, indicators=[" ", " "], subfields=subfields)
+    assert is_item_field(field) == expectation
 
 
 def test_marcxml_reader():
