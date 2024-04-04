@@ -1,8 +1,9 @@
 import pytest
 
-from pymarc import Record, Field, Subfield
+from pymarc import Record, Field, Subfield, MARCReader
 
 from google_books.marc_manipulator import (
+    create_stub_hathi_records,
     find_oclcno,
     fix_oclc_info,
     generate_hathi_url,
@@ -10,6 +11,31 @@ from google_books.marc_manipulator import (
     is_item_field,
     marcxml_reader,
 )
+
+
+def test_create_stub_hathi_records(tmp_path):
+    out = tmp_path / "out-test.mrc"
+    create_stub_hathi_records("tests/marcxml-sample.xml", out)
+
+    with open(out, "rb") as marcfile:
+        reader = MARCReader(marcfile)
+        for n, bib in enumerate(reader):
+            tags = [f.tag for f in bib.fields]
+            assert tags == ["245", "856", "907"]
+            if n == 0:
+                assert (
+                    str(bib.get("856"))
+                    == "=856  40$uhttp://hdl.handle.net/2027/nyp.33433010141525$zFull text available via HathiTrust"
+                )
+                assert bib.get("907").get("a") == ".b122776471"
+            elif n == 1:
+                assert (
+                    str(bib.get("856"))
+                    == "=856  40$uhttp://hdl.handle.net/2027/nyp.33433010140428$zFull text available via HathiTrust"
+                )
+                assert bib.get("907").get("a") == ".b122759692"
+
+    assert n == 1  # counting starts at 0!
 
 
 @pytest.mark.parametrize("arg,expectation", [("(OCoLC)1234", "1234"), ("1234", None)])
