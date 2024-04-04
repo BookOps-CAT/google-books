@@ -20,8 +20,8 @@ def test_create_stub_hathi_records(tmp_path):
     with open(out, "rb") as marcfile:
         reader = MARCReader(marcfile)
         for n, bib in enumerate(reader):
-            tags = [f.tag for f in bib.fields]
-            assert tags == ["245", "856", "907"]
+            bib_tags = [f.tag for f in bib.fields]
+            assert bib_tags == ["245", "856", "907"]
             if n == 0:
                 assert (
                     str(bib.get("856"))
