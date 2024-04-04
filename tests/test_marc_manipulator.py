@@ -25,17 +25,24 @@ def test_create_stub_hathi_records(tmp_path):
             if n == 0:
                 assert (
                     str(bib.get("856"))
-                    == "=856  40$uhttp://hdl.handle.net/2027/nyp.33433010141525$zFull text available via HathiTrust"
+                    == "=856  40$uhttp://hdl.handle.net/2027/nyp.33433010141525$zFull text available via HathiTrust"  # noqa:E501
                 )
                 assert bib.get("907").get("a") == ".b122776471"
             elif n == 1:
                 assert (
                     str(bib.get("856"))
-                    == "=856  40$uhttp://hdl.handle.net/2027/nyp.33433010140428$zFull text available via HathiTrust"
+                    == "=856  40$uhttp://hdl.handle.net/2027/nyp.33433010140428$zFull text available via HathiTrust"  # noqa:E501
                 )
                 assert bib.get("907").get("a") == ".b122759692"
 
     assert n == 1  # counting starts at 0!
+
+
+def test_create_stub_hathi_records_no_barcode_warning():
+    with pytest.warns(
+        UserWarning, match="b122776471 has no barcode in 945 field. Skipping."
+    ):
+        create_stub_hathi_records("tests/marcxml-sample-no-barcode.xml", "")
 
 
 @pytest.mark.parametrize("arg,expectation", [("(OCoLC)1234", "1234"), ("1234", None)])

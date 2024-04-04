@@ -160,10 +160,12 @@ def create_stub_hathi_records(marcxml: str, out: str) -> None:
                 has_item_field = True
                 stub_bib.add_ordered_field(t856)
         if not has_item_field:
-            warnings.warn(f"No barcode in 945 field {bibno}.")
-
-        # output bibs in MARC21 format
-        append2marc(stub_bib, out)
+            warnings.warn(
+                f"{bibno} has no barcode in 945 field. Skipping.", UserWarning
+            )
+        else:
+            # output bibs in MARC21 format
+            append2marc(stub_bib, out)
 
 
 def marcxml_reader(fh: str) -> Iterator[Record]:

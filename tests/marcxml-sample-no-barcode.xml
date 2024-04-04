@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<marc:collection xmlns:marc="http://www.loc.gov/MARC21/slim"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.loc.gov/MARC21/slim http://www.loc.gov/standards/marcxml/schema/MARC21slim.xsd">
+    <marc:record>
+        <marc:leader>01291nam a2200325zi 4500</marc:leader>
+        <marc:controlfield tag="001">NYPY710535216-B</marc:controlfield>
+        <marc:controlfield tag="003">CStRLIN</marc:controlfield>
+        <marc:controlfield tag="005">19990811185213.2</marc:controlfield>
+        <marc:controlfield tag="008">711126c19301921xxua|   |b   |0|| | eng d</marc:controlfield>
+        <marc:datafield tag="035" ind1=" " ind2=" ">
+            <marc:subfield code="a">(NN-PD)710535216</marc:subfield>
+        </marc:datafield>
+        <marc:datafield tag="035" ind1=" " ind2=" ">
+            <marc:subfield code="a">(WaOLN)nyp2264446</marc:subfield>
+        </marc:datafield>
+        <marc:datafield tag="035" ind1=" " ind2=" ">
+            <marc:subfield code="a">(OCoLC)2386549</marc:subfield>
+        </marc:datafield>
+        <marc:datafield tag="040" ind1=" " ind2=" ">
+            <marc:subfield code="a">NN-PD</marc:subfield>
+            <marc:subfield code="c">NN-PD</marc:subfield>
+            <marc:subfield code="d">CStRLIN</marc:subfield>
+            <marc:subfield code="d">WaOLN</marc:subfield>
+        </marc:datafield>
+        <marc:datafield tag="100" ind1="1" ind2=" ">
+            <marc:subfield code="a">Colby, Gertrude K.</marc:subfield>
+        </marc:datafield>
+        <marc:datafield tag="245" ind1="1" ind2="4">
+            <marc:subfield code="a">The conflict;</marc:subfield>
+            <marc:subfield code="b">a health masque in pantomime, by Gertrude K. Colby with an introduction by Thomas D. Wood.</marc:subfield>
+        </marc:datafield>
+        <marc:datafield tag="260" ind1=" " ind2=" ">
+            <marc:subfield code="a">New York,</marc:subfield>
+            <marc:subfield code="b">A. S. Barnes and Co.,</marc:subfield>
+            <marc:subfield code="c">1930 [c1921]</marc:subfield>
+        </marc:datafield>
+        <marc:datafield tag="300" ind1=" " ind2=" ">
+            <marc:subfield code="a">70 p.</marc:subfield>
+            <marc:subfield code="b">illus., diagrs.</marc:subfield>
+            <marc:subfield code="c">24 cm.</marc:subfield>
+        </marc:datafield>
+        <marc:datafield tag="504" ind1=" " ind2=" ">
+            <marc:subfield code="a">Bibliography: p. 70.</marc:subfield>
+        </marc:datafield>
+        <marc:datafield tag="690" ind1=" " ind2="4">
+            <marc:subfield code="a">Masques (Works).</marc:subfield>
+            <marc:subfield code="b">The conflict.</marc:subfield>
+        </marc:datafield>
+        <marc:datafield tag="690" ind1=" " ind2="4">
+            <marc:subfield code="a">Children's pageants, masques, plays.</marc:subfield>
+        </marc:datafield>
+        <marc:datafield tag="690" ind1=" " ind2="4">
+            <marc:subfield code="a">Children's pantomimes.</marc:subfield>
+        </marc:datafield>
+        <marc:datafield tag="799" ind1="0" ind2=" ">
+            <marc:subfield code="a">Gift of Alice A. Sefton.</marc:subfield>
+        </marc:datafield>
+        <marc:datafield tag="852" ind1="8" ind2=" ">
+            <marc:subfield code="h">*MGSB (Colby, G. Conflict. 1930)</marc:subfield>
+        </marc:datafield>
+        <marc:datafield tag="907" ind1=" " ind2=" ">
+            <marc:subfield code="a">.b122776471</marc:subfield>
+            <marc:subfield code="b">07-18-23</marc:subfield>
+            <marc:subfield code="c">12-15-2008 15:35</marc:subfield>
+        </marc:datafield>
+        <marc:datafield tag="998" ind1=" " ind2=" ">
+            <marc:subfield code="a">pad</marc:subfield>
+            <marc:subfield code="b">09-05-99</marc:subfield>
+            <marc:subfield code="c">m</marc:subfield>
+            <marc:subfield code="d">a  </marc:subfield>
+            <marc:subfield code="e">-</marc:subfield>
+            <marc:subfield code="f">eng</marc:subfield>
+            <marc:subfield code="g">xxu</marc:subfield>
+            <marc:subfield code="h">4</marc:subfield>
+            <marc:subfield code="i">1</marc:subfield>
+        </marc:datafield>
+        <marc:datafield tag="910" ind1=" " ind2=" ">
+            <marc:subfield code="a">RL</marc:subfield>
+        </marc:datafield>
+        <marc:datafield tag="997" ind1=" " ind2=" ">
+            <marc:subfield code="a">pd</marc:subfield>
+            <marc:subfield code="b">09-05-99</marc:subfield>
+            <marc:subfield code="c">m</marc:subfield>
+            <marc:subfield code="d">a</marc:subfield>
+            <marc:subfield code="e">-</marc:subfield>
+            <marc:subfield code="f">eng</marc:subfield>
+            <marc:subfield code="g">xxu</marc:subfield>
+            <marc:subfield code="h">4</marc:subfield>
+        </marc:datafield>
+        <marc:datafield tag="991" ind1=" " ind2=" ">
+            <marc:subfield code="y">2386549</marc:subfield>
+        </marc:datafield>
+        <marc:datafield tag="945" ind1=" " ind2=" ">
+            <marc:subfield code="a">.b122776471</marc:subfield>
+        </marc:datafield>
+    </marc:record>
+</marc:collection>
