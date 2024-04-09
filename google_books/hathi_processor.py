@@ -6,10 +6,11 @@ from google_books.utils import save2csv, fh_date
 
 def find_bibno(line: str) -> str:
     """Extracts Sierra bib # from the report"""
-    bibno = line[9:20]
-    if not bibno.startswith(".b"):
-        print(line)
-        raise ValueError("Invalid Sierra bib # encountered.")
+    bibno_idx = line.find(".b")
+    if bibno_idx >= 0:
+        bibno = line[bibno_idx : bibno_idx + 11]
+    else:
+        raise ValueError(f"Invalid Sierra bib # encountered. Line: {line}")
     return bibno
 
 
@@ -19,6 +20,15 @@ def find_cid(line: str) -> str:
     if not cid.isdigit():
         raise ValueError("Invalid Hathi CID encountered.")
     return cid
+
+
+def find_err_msg(line: str) -> str:
+    """Extracts error message given in Zephir report"""
+    if line.startswith("ERROR"):
+        err_idx = line.find("): ")
+        return line[err_idx + 3 :].strip()
+    else:
+        return ""
 
 
 def parse_hathi_processing_report(fh: str) -> None:
@@ -47,6 +57,10 @@ def parse_hathi_processing_report(fh: str) -> None:
                         f"files/out/hathi-{date}-missing-oclc.csv",
                         [bibno],
                     )
+            elif line.startswith("ERROR"):
+                bibno = find_bibno(line)
+                err_msg = find_err_msg(line)
+                save2csv(f"files/out/hathi-{date}-errors.csv", [bibno, err_msg])
 
 
 def google_reconciliation_to_barcodes_lst(fh: str) -> list[str]:
