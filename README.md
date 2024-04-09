@@ -35,7 +35,7 @@ $ google-books hathi-report [FILE PATH]
 Received Google's reconciliation report can be used to remove from MARCXML file, intended for HathiTrust, any records for materials that have not been scanned. Expect to receive a such reconciliation report via email about 2 months after shipment to Google. Only then remove records for any not digitized items and submit processed MARCXML file to Zephir.
 
 ```bash
-$ google-books hathi-metadata-prep[FILE PATH] GOOG-REPORT=[FILE PATH] OUT=[FILE PATH]
+$ google-books hathi-metadata-prep [MARCXML IN PATH] [GOOGLE FO REPORT PATH] [MARCXML OUT PATH]
 ```
 
 #### Move OCLC Identifiers to the Control Field
