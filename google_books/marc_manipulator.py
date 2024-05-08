@@ -1,3 +1,4 @@
+from collections import Counter
 from typing import Optional, Iterator
 import warnings
 
@@ -131,41 +132,62 @@ def is_item_field(field: Field) -> bool:
             return False
 
 
-def create_stub_hathi_records(marcxml: str, out: str) -> None:
+def create_stub_hathi_records(
+    marcxml_submitted: str, marcxml_errors: str, out: str
+) -> None:
     """
     Creates stub records that include only LDR, 245, 856, & 907 fields.
     Generates 856 fields with HathiTrust URLs.
     Args:
-        marcxml:                path to MARCXML file submitted to HathiTrust
+        marcxml_submitted:      path to MARCXML file submitted to HathiTrust
+        marcxml_errors:         path to Hathi's MARCXML with invalid records
         out:                    path to MARC21 file with output stub records
     """
-    for bib in marcxml_reader(marcxml):
+    invalid_bibs = get_invalid_bib_nos(marcxml_errors)
+    print(f"Removing {len(invalid_bib)} invalid records from the submission file.")
+    total_out_bibs = Counter()
 
-        # create new stub records
-        stub_bib = Record()
-        stub_bib.leader = bib.leader
-        stub_bib.add_ordered_field(bib.get("245"))
-        stub_bib.add_ordered_field(bib.get("907"))
+    for bib in marcxml_reader(marcxml_submitted):
 
         bibno = bib.get("907").get("a")  # type: ignore
-        has_item_field = False
+        if bibno not in invalid_bibs:
+            # create new stub records
+            stub_bib = Record()
+            stub_bib.leader = bib.leader
+            stub_bib.add_ordered_field(bib.get("245"))
+            stub_bib.add_ordered_field(bib.get("907"))
+            has_item_field = False
 
-        # construct 856s with Hathi URLs
-        for f in bib.get_fields("945"):
-            barcode = f.get("i")
-            volume = f.get("c")
-            t856 = generate_hathi_url(barcode, volume)
+            # construct 856s with Hathi URLs
+            for f in bib.get_fields("945"):
+                barcode = f.get("i")
+                volume = f.get("c")
+                t856 = generate_hathi_url(barcode, volume)
 
-            if t856 and is_item_field(f):
-                has_item_field = True
-                stub_bib.add_ordered_field(t856)
-        if not has_item_field:
-            warnings.warn(
-                f"{bibno} has no barcode in 945 field. Skipping.", UserWarning
-            )
-        else:
-            # output bibs in MARC21 format
-            append2marc(stub_bib, out)
+                if t856 and is_item_field(f):
+                    has_item_field = True
+                    stub_bib.add_ordered_field(t856)
+
+            if not has_item_field:
+                warnings.warn(
+                    f"{bibno} has no barcode in 945 field. Skipping.", UserWarning
+                )
+            else:
+                # output bibs in MARC21 format
+                total_out_bibs.update(bibno=1)
+                append2marc(stub_bib, out)
+
+    print(f"Output {total_out_bibs.total()} stub records.")
+
+
+def get_invalid_bib_nos(marcxml_error: str) -> list[str]:
+    """
+    Reads provided by Hathi MARCXML error report file and creates a list of Sierra
+    bib #s.
+    Args:
+        marcxml_error:              path to marxml with invalid bibs provided by Hathi
+    """
+    return [bib.get("907").get("a") for bib in marcxml_reader(marcxml_error)]
 
 
 def marcxml_reader(fh: str) -> Iterator[Record]:

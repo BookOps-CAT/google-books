@@ -65,13 +65,14 @@ def recap_manifest(filename: str) -> None:
 
 
 @cli.command()
-@click.argument("marcxml", type=click.Path(exists=True))
+@click.argument("marcxml_submitted", type=click.Path(exists=True))
+@click.argument("marcxml_errors", type=click.Path(exists=True))
 @click.argument("out", type=click.Path())
-def hathi_urls(marcxml: str, out: str) -> None:
+def hathi_urls(marcxml_submitted: str, marcxml_errors: str, out: str) -> None:
     """
     Creates stub MARC21 records with generated 856 for HathiTrust URLs.
     """
-    create_stub_hathi_records(marcxml, out)
+    create_stub_hathi_records(marcxml_submitted, marcxml_errors, out)
     click.echo(f"Stub records with HathiTrust URL have been saved to {out}.")
 
 
