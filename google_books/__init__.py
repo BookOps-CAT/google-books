@@ -6,7 +6,10 @@ from google_books.hathi_processor import (
 )
 from google_books.marc_manipulator import manipulate_records as fix_oclc_data
 from google_books.marc_manipulator import create_stub_hathi_records
-from google_books.recap_manifest import prep_recap_manifest_for_sierra_list
+from google_books.manifest import (
+    prep_onsite_manifest_for_google,
+    prep_recap_manifest_for_sierra_list,
+)
 
 
 __version__ = "0.1.0"
@@ -62,6 +65,16 @@ def recap_manifest(filename: str) -> None:
     """
     out = prep_recap_manifest_for_sierra_list(filename)
     click.echo(f"Cleaned up manifest was saved to {out.resolve()}")
+
+
+@cli.command()
+@click.argument("filename", type=click.Path(exists=True))
+def onsite_manifest(filename: str) -> None:
+    """
+    Preps Sierra item export for submission to Google
+    """
+    out = prep_onsite_manifest_for_google(filename)
+    click.echo(f"Prepped manifest was saved to {out.resolve()}")
 
 
 @cli.command()

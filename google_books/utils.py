@@ -3,7 +3,7 @@ import csv
 import click
 
 
-def save2csv(dst_fh, row):
+def save2csv(dst_fh, delimiter, row):
     """
     Appends a list with data to a dst_fh csv
     args:
@@ -14,7 +14,7 @@ def save2csv(dst_fh, row):
     with open(dst_fh, "a", encoding="utf-8") as csvfile:
         out = csv.writer(
             csvfile,
-            delimiter=",",
+            delimiter=delimiter,
             lineterminator="\n",
             quotechar='"',
             quoting=csv.QUOTE_MINIMAL,
