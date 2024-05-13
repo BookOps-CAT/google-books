@@ -44,23 +44,25 @@ def parse_hathi_processing_report(fh: str) -> None:
         for line in file.readlines():
             if "new cid =" in line:
                 cid = find_cid(line)
-                save2csv(f"files/out/hathi-{date}-success.csv", [cid])
+                save2csv(f"files/out/hathi-{date}-success.csv", ",", [cid])
             elif line.startswith("WARNING: .b"):
                 bibno = find_bibno(line)
                 if "OCLC number found in unspecified 035$" in line:
                     save2csv(
                         f"files/out/hathi-{date}-unspecified-oclc.csv",
+                        ",",
                         [bibno],
                     )
                 elif "no OCLC number in record" in line:
                     save2csv(
                         f"files/out/hathi-{date}-missing-oclc.csv",
+                        ",",
                         [bibno],
                     )
             elif line.startswith("ERROR"):
                 bibno = find_bibno(line)
                 err_msg = find_err_msg(line)
-                save2csv(f"files/out/hathi-{date}-errors.csv", [bibno, err_msg])
+                save2csv(f"files/out/hathi-{date}-errors.csv", "'", [bibno, err_msg])
 
 
 def google_reconciliation_to_barcodes_lst(fh: str) -> list[str]:
