@@ -144,7 +144,7 @@ def create_stub_hathi_records(
         out:                    path to MARC21 file with output stub records
     """
     invalid_bibs = get_invalid_bib_nos(marcxml_errors)
-    print(f"Removing {len(invalid_bib)} invalid records from the submission file.")
+    print(f"Removing {len(invalid_bibs)} invalid records from the submission file.")
     total_out_bibs = Counter()
 
     for bib in marcxml_reader(marcxml_submitted):
