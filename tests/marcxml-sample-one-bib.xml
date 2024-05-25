@@ -1,0 +1,123 @@
+<collection xmlns="http://www.loc.gov/MARC21/slim">
+<record>
+    <leader>01291nam a2200325zi 4500</leader>
+    <controlfield tag="001">NYPY710535216-B</controlfield>
+    <controlfield tag="003">CStRLIN</controlfield>
+    <controlfield tag="005">19990811185213.2</controlfield>
+    <controlfield tag="008">711126c19301921xxua|   |b   |0|| | eng d</controlfield>
+    <datafield tag="035" ind1=" " ind2=" ">
+        <subfield code="a">(NN-PD)710535216</subfield>
+    </datafield>
+    <datafield tag="035" ind1=" " ind2=" ">
+        <subfield code="a">(WaOLN)nyp2264446</subfield>
+    </datafield>
+    <datafield tag="035" ind1=" " ind2=" ">
+        <subfield code="a">(OCoLC)2386549</subfield>
+    </datafield>
+    <datafield tag="040" ind1=" " ind2=" ">
+        <subfield code="a">NN-PD</subfield>
+        <subfield code="c">NN-PD</subfield>
+        <subfield code="d">CStRLIN</subfield>
+        <subfield code="d">WaOLN</subfield>
+    </datafield>
+    <datafield tag="100" ind1="1" ind2=" ">
+        <subfield code="a">Colby, Gertrude K.</subfield>
+    </datafield>
+    <datafield tag="245" ind1="1" ind2="4">
+        <subfield code="a">The conflict;</subfield>
+        <subfield code="b">a health masque in pantomime, by Gertrude K. Colby with an introduction by Thomas D. Wood.</subfield>
+    </datafield>
+    <datafield tag="260" ind1=" " ind2=" ">
+        <subfield code="a">New York,</subfield>
+        <subfield code="b">A. S. Barnes and Co.,</subfield>
+        <subfield code="c">1930 [c1921]</subfield>
+    </datafield>
+    <datafield tag="300" ind1=" " ind2=" ">
+        <subfield code="a">70 p.</subfield>
+        <subfield code="b">illus., diagrs.</subfield>
+        <subfield code="c">24 cm.</subfield>
+    </datafield>
+    <datafield tag="504" ind1=" " ind2=" ">
+        <subfield code="a">Bibliography: p. 70.</subfield>
+    </datafield>
+    <datafield tag="690" ind1=" " ind2="4">
+        <subfield code="a">Masques (Works).</subfield>
+        <subfield code="b">The conflict.</subfield>
+    </datafield>
+    <datafield tag="690" ind1=" " ind2="4">
+        <subfield code="a">Children's pageants, masques, plays.</subfield>
+    </datafield>
+    <datafield tag="690" ind1=" " ind2="4">
+        <subfield code="a">Children's pantomimes.</subfield>
+    </datafield>
+    <datafield tag="799" ind1="0" ind2=" ">
+        <subfield code="a">Gift of Alice A. Sefton.</subfield>
+    </datafield>
+    <datafield tag="852" ind1="8" ind2=" ">
+        <subfield code="h">*MGSB (Colby, G. Conflict. 1930)</subfield>
+    </datafield>
+    <datafield tag="907" ind1=" " ind2=" ">
+        <subfield code="a">.b122776471</subfield>
+        <subfield code="b">07-18-23</subfield>
+        <subfield code="c">12-15-2008 15:35</subfield>
+    </datafield>
+    <datafield tag="998" ind1=" " ind2=" ">
+        <subfield code="a">pad</subfield>
+        <subfield code="b">09-05-99</subfield>
+        <subfield code="c">m</subfield>
+        <subfield code="d">a  </subfield>
+        <subfield code="e">-</subfield>
+        <subfield code="f">eng</subfield>
+        <subfield code="g">xxu</subfield>
+        <subfield code="h">4</subfield>
+        <subfield code="i">1</subfield>
+    </datafield>
+    <datafield tag="959" ind1=" " ind2=" ">
+        <subfield code="a">.b37554542</subfield>
+        <subfield code="b">08-28-07</subfield>
+        <subfield code="c">09-23-95</subfield>
+    </datafield>
+    <datafield tag="910" ind1=" " ind2=" ">
+        <subfield code="a">RL</subfield>
+    </datafield>
+    <datafield tag="997" ind1=" " ind2=" ">
+        <subfield code="a">pd</subfield>
+        <subfield code="b">09-05-99</subfield>
+        <subfield code="c">m</subfield>
+        <subfield code="d">a</subfield>
+        <subfield code="e">-</subfield>
+        <subfield code="f">eng</subfield>
+        <subfield code="g">xxu</subfield>
+        <subfield code="h">4</subfield>
+    </datafield>
+    <datafield tag="991" ind1=" " ind2=" ">
+        <subfield code="y">2386549</subfield>
+    </datafield>
+    <datafield tag="945" ind1=" " ind2=" ">
+        <subfield code="a">*MGSB (Colby, G. Conflict. 1930)</subfield>
+        <subfield code="d">  -  -  </subfield>
+        <subfield code="e">0</subfield>
+        <subfield code="f">12-06-2023 8:43</subfield>
+        <subfield code="g">1</subfield>
+        <subfield code="h">03-05-24</subfield>
+        <subfield code="i">33433010141525</subfield>
+        <subfield code="j">221</subfield>
+        <subfield code="k">  -  -  </subfield>
+        <subfield code="l">rcpd2</subfield>
+        <subfield code="o">-</subfield>
+        <subfield code="p">$0.00</subfield>
+        <subfield code="q">-</subfield>
+        <subfield code="r">2</subfield>
+        <subfield code="s">-  </subfield>
+        <subfield code="t">2</subfield>
+        <subfield code="u">2</subfield>
+        <subfield code="v">0</subfield>
+        <subfield code="w">1</subfield>
+        <subfield code="x">0</subfield>
+        <subfield code="y">.i105014709</subfield>
+        <subfield code="z">02-03-2009 5:58</subfield>
+        <subfield code="2">0</subfield>
+        <subfield code="1">814</subfield>
+    </datafield>
+</record>
+</collection>
