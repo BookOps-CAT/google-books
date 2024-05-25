@@ -35,9 +35,13 @@ def test_create_stub_hathi_records(tmp_path):
 
 def test_create_stub_hathi_records_no_barcode_warning():
     with pytest.warns(
-        UserWarning, match="b122776471 has no barcode in 945 field. Skipping."
+        UserWarning, match="b122776470 has no barcode in 945 field. Skipping."
     ):
-        create_stub_hathi_records("tests/marcxml-sample-no-barcode.xml", "")
+        create_stub_hathi_records(
+            "tests/marcxml-sample-no-barcode.xml",
+            "tests/marcxml-sample-one-bib.xml",
+            "",
+        )
 
 
 @pytest.mark.parametrize("arg,expectation", [("(OCoLC)1234", "1234"), ("1234", None)])

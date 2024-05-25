@@ -59,7 +59,7 @@
             <marc:subfield code="h">*MGSB (Colby, G. Conflict. 1930)</marc:subfield>
         </marc:datafield>
         <marc:datafield tag="907" ind1=" " ind2=" ">
-            <marc:subfield code="a">.b122776471</marc:subfield>
+            <marc:subfield code="a">.b122776470</marc:subfield>
             <marc:subfield code="b">07-18-23</marc:subfield>
             <marc:subfield code="c">12-15-2008 15:35</marc:subfield>
         </marc:datafield>
@@ -91,7 +91,7 @@
             <marc:subfield code="y">2386549</marc:subfield>
         </marc:datafield>
         <marc:datafield tag="945" ind1=" " ind2=" ">
-            <marc:subfield code="a">.b122776471</marc:subfield>
+            <marc:subfield code="a">.b122776470</marc:subfield>
         </marc:datafield>
     </marc:record>
 </marc:collection>
