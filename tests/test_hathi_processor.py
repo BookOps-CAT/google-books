@@ -12,7 +12,7 @@ from google_books.hathi_processor import (
     "arg",
     [
         "WARNING: .b12274570x (7472): no OCLC number in record",
-        "ERROR 47: .b12274570x (7471): invalid recTyp: b, leader = '01249nbcaa2200349   4500'",
+        "ERROR 47: .b12274570x (7471): invalid recTyp: b, leader = '01249nbcaa2200349   4500'",  # noqa: E501
     ],
 )
 def test_find_bibno(arg):
@@ -24,6 +24,17 @@ def test_find_bibno_exception():
         find_bibno("foo bar")
 
     assert "Invalid Sierra bib # encountered. Line: foo bar" in str(exc.value)
+
+
+def test_find_cid():
+    line = "INFO: 1: new cid = 103134087"
+    assert find_cid(line) == "103134087"
+
+
+def test_find_cid_value_error():
+    with pytest.raises(ValueError) as exc:
+        find_cid("INFO: 1: new cid = 10313408x")
+    assert "Invalid Hathi CID encountered." in str(exc.value)
 
 
 @pytest.mark.parametrize(
