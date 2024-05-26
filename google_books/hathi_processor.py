@@ -8,7 +8,7 @@ def find_bibno(line: str) -> str:
     """Extracts Sierra bib # from the report"""
     bibno_idx = line.find(".b")
     if bibno_idx >= 0:
-        bibno = line[bibno_idx : bibno_idx + 11]
+        bibno = line[bibno_idx : bibno_idx + 11]  # noqa: E203
     else:
         raise ValueError(f"Invalid Sierra bib # encountered. Line: {line}")
     return bibno
@@ -26,7 +26,7 @@ def find_err_msg(line: str) -> str:
     """Extracts error message given in Zephir report"""
     if line.startswith("ERROR"):
         err_idx = line.find("): ")
-        return line[err_idx + 3 :].strip()
+        return line[err_idx + 3 :].strip()  # noqa: E203
     else:
         return ""
 
