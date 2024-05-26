@@ -145,7 +145,7 @@ def create_stub_hathi_records(
     """
     invalid_bibs = get_invalid_bib_nos(marcxml_errors)
     print(f"Found {len(invalid_bibs)} rejected record(s) by Zephir.")
-    total_out_bibs = Counter()
+    total_out_bibs = Counter()  # type: ignore
 
     for bib in marcxml_reader(marcxml_submitted):
 
@@ -187,7 +187,14 @@ def get_invalid_bib_nos(marcxml_error: str) -> list[str]:
     Args:
         marcxml_error:              path to marxml with invalid bibs provided by Hathi
     """
-    return [bib.get("907").get("a") for bib in marcxml_reader(marcxml_error)]
+    try:
+        bibNos = []
+        for bib in marcxml_reader(marcxml_error):
+            bibNos.append(bib.get("907").get("a"))  # type: ignore
+        return bibNos
+    except AttributeError:
+        warnings.warn("Encountered bib without Sierra bib # in 907$a).")
+        return []
 
 
 def marcxml_reader(fh: str) -> Iterator[Record]:
