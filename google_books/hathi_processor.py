@@ -26,7 +26,7 @@ def find_err_msg(line: str) -> str:
     """Extracts error message given in Zephir report"""
     if line.startswith("ERROR"):
         err_idx = line.find("): ")
-        return line[err_idx + 3 :].strip()
+        return line[err_idx + 3 :].strip()  # noqa: E203
     else:
         return ""
 

@@ -15,34 +15,33 @@ from google_books.marc_manipulator import (
 
 def test_create_stub_hathi_records(tmp_path):
     out = tmp_path / "out-test.mrc"
-    create_stub_hathi_records("tests/marcxml-sample.xml", out)
+    create_stub_hathi_records(
+        "tests/marcxml-sample.xml", "tests/marcxml-sample-one-bib.xml", out
+    )
 
+    # one record will be skipped because it appears in the
+    # marcxml file indicating rejected by Zephir bib
     with open(out, "rb") as marcfile:
         reader = MARCReader(marcfile)
-        for n, bib in enumerate(reader):
+        for bib in reader:
             bib_tags = [f.tag for f in bib.fields]
             assert bib_tags == ["245", "856", "907"]
-            if n == 0:
-                assert (
-                    str(bib.get("856"))
-                    == "=856  40$uhttp://hdl.handle.net/2027/nyp.33433010141525$zFull text available via HathiTrust"  # noqa:E501
-                )
-                assert bib.get("907").get("a") == ".b122776471"
-            elif n == 1:
-                assert (
-                    str(bib.get("856"))
-                    == "=856  40$uhttp://hdl.handle.net/2027/nyp.33433010140428$zFull text available via HathiTrust"  # noqa:E501
-                )
-                assert bib.get("907").get("a") == ".b122759692"
-
-    assert n == 1  # counting starts at 0!
+            assert (
+                str(bib.get("856"))
+                == "=856  40$uhttp://hdl.handle.net/2027/nyp.33433010140428$zFull text available via HathiTrust"  # noqa:E501
+            )
+            assert bib.get("907").get("a") == ".b122759692"
 
 
 def test_create_stub_hathi_records_no_barcode_warning():
     with pytest.warns(
-        UserWarning, match="b122776471 has no barcode in 945 field. Skipping."
+        UserWarning, match="b122776470 has no barcode in 945 field. Skipping."
     ):
-        create_stub_hathi_records("tests/marcxml-sample-no-barcode.xml", "")
+        create_stub_hathi_records(
+            "tests/marcxml-sample-no-barcode.xml",
+            "tests/marcxml-sample-one-bib.xml",
+            "",
+        )
 
 
 @pytest.mark.parametrize("arg,expectation", [("(OCoLC)1234", "1234"), ("1234", None)])
