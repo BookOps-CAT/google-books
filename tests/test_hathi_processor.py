@@ -16,7 +16,7 @@ from google_books.hathi_processor import (
     ],
 )
 def test_find_bibno(arg):
-    assert find_bibno(arg) == ".b12274570x"
+    assert find_bibno(arg) == "b12274570x"
 
 
 def test_find_bibno_exception():
