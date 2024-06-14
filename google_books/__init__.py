@@ -82,9 +82,9 @@ def onsite_manifest(filename: str) -> None:
 @click.argument("tar_file", type=click.Path(exists=True))
 def get_candidate_items(tar_file: str) -> None:
     """
-    Prepares the item list for Sierra based on Google Candidate list _combined tar file.
-    Creates `nypl-YYYY-MM-DD-candidate-items.csv` file with item numbers in the `picklist`
-    folder.
+    Prepares the item list for Sierra based on Google Candidate list _combined
+    tar file. Creates `nypl-YYYY-MM-DD-candidate-items.csv` file with item numbers
+    in the `picklist` folder.
     Args:
         tar_file (str): The tar file containing the candidate list.
     """

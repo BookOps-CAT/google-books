@@ -8,7 +8,7 @@ def find_bibno(line: str) -> str:
     """Extracts Sierra bib # from the report"""
     bibno_idx = line.find(".b")
     if bibno_idx >= 0:
-        bibno = line[bibno_idx + 1 : bibno_idx + 11]
+        bibno = line[bibno_idx + 1 : bibno_idx + 11]  # noqa: E203
     else:
         raise ValueError(f"Invalid Sierra bib # encountered. Line: {line}")
     return bibno
@@ -86,7 +86,7 @@ def parse_hathi_processing_report(fh: str) -> None:
                     ],
                 )
                 err_count += 1
-    print(f"Report:\n\t")
+    print("Report:\n\t")
     print(f"success: {succ_count} ({succ_fh})\n")
     print(f"\tOCLC in 035 only: {inval_oclc_loc_count} ({inval_oclc_fh})\n")
     print(f"\tmissing OCLC#: {miss_oclc_count} ({miss_oclc_fh})\n")

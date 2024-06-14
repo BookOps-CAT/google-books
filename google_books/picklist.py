@@ -6,7 +6,6 @@ NYPL pick list.
 import csv
 import glob
 import tarfile
-import warnings
 
 from google_books.utils import fh_date, save2csv
 
@@ -25,8 +24,9 @@ def extract_candidate_list(tar_file: str) -> None:
 def prep_item_list_for_sierra(tar_file: str) -> None:
     """
     Prepares the item list for Sierra based on Google Candidate list _combined tar file.
-    Creates `nypl-YYYY-MM-DD-candidate-items.csv` file with item numbers in the `picklist`
-    folder.
+    Creates `nypl-YYYY-MM-DD-candidate-items.csv` file with item numbers in the
+    `picklist` folder.
+
     Args:
         tar_file (str): The tar file containing the candidate list.
     """
