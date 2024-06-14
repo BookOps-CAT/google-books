@@ -1,4 +1,5 @@
 import csv
+from datetime import datetime
 
 import click
 
@@ -29,13 +30,28 @@ def fh_date(fh: str) -> str:
     """Creates base name for analysis report files"""
     err_msg = (
         "The name of the file to be parsed is invalid. "
-        "Correct pattern: 'nyp_YYYYMMDD_google'."
+        "Correct pattern: 'nyp_YYYYMMDD_google' or 'files/picklist/nypl-YYYY-MM-DD_'"
     )
     try:
         fh_str = click.format_filename(fh)
-        fh_date = fh_str.split("_")[1]
+        if fh_str.startswith("files/picklist/nypl-"):
+            fh_date = fh_str.split("_")[0][20:]
+        else:
+            fh_date = fh_str.split("_")[1]
     except IndexError:
         raise ValueError(err_msg)
-    if not fh_date.isdigit():
+
+    # check if the date is in the correct format
+    try:
+        datetime.strptime(fh_date, "%Y%m%d")
+    except ValueError:
+        pass
+    else:
+        return fh_date
+
+    try:
+        datetime.strptime(fh_date, "%Y-%m-%d")
+    except ValueError:
         raise ValueError(err_msg)
-    return fh_date
+    else:
+        return fh_date

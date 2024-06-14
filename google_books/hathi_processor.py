@@ -8,7 +8,7 @@ def find_bibno(line: str) -> str:
     """Extracts Sierra bib # from the report"""
     bibno_idx = line.find(".b")
     if bibno_idx >= 0:
-        bibno = line[bibno_idx : bibno_idx + 11]
+        bibno = line[bibno_idx + 1 : bibno_idx + 11]
     else:
         raise ValueError(f"Invalid Sierra bib # encountered. Line: {line}")
     return bibno
@@ -26,7 +26,7 @@ def find_err_msg(line: str) -> str:
     """Extracts error message given in Zephir report"""
     if line.startswith("ERROR"):
         err_idx = line.find("): ")
-        return line[err_idx + 3 :].strip()
+        return line[err_idx + 3 :].strip()  # noqa: E203
     else:
         return ""
 
@@ -40,29 +40,57 @@ def parse_hathi_processing_report(fh: str) -> None:
         fh:             path to processing report
     """
     date = fh_date(fh)
+    succ_count = 0
+    succ_fh = f"files/out/hathi-{date}-success.csv"
+    inval_oclc_loc_count = 0
+    inval_oclc_fh = f"files/out/hathi-{date}-unspecified-oclc.csv"
+    miss_oclc_count = 0
+    miss_oclc_fh = f"files/out/hathi-{date}-missing-oclc.csv"
+    err_count = 0
+    err_fh = f"files/out/hathi-{date}-errors.csv"
     with open(fh, "r") as file:
         for line in file.readlines():
             if "new cid =" in line:
                 cid = find_cid(line)
-                save2csv(f"files/out/hathi-{date}-success.csv", ",", [cid])
+                save2csv(succ_fh, ",", [cid])
+                succ_count += 1
             elif line.startswith("WARNING: .b"):
                 bibno = find_bibno(line)
                 if "OCLC number found in unspecified 035$" in line:
                     save2csv(
-                        f"files/out/hathi-{date}-unspecified-oclc.csv",
+                        inval_oclc_fh,
                         ",",
                         [bibno],
                     )
+                    inval_oclc_loc_count += 1
                 elif "no OCLC number in record" in line:
                     save2csv(
-                        f"files/out/hathi-{date}-missing-oclc.csv",
+                        miss_oclc_fh,
                         ",",
                         [bibno],
                     )
+                    miss_oclc_count += 1
             elif line.startswith("ERROR"):
                 bibno = find_bibno(line)
                 err_msg = find_err_msg(line)
-                save2csv(f"files/out/hathi-{date}-errors.csv", "'", [bibno, err_msg])
+                save2csv(
+                    err_fh,
+                    ",",
+                    [
+                        bibno,
+                        f"{date}",
+                        "Zephir validation",
+                        f"nyp_{date}_google.xml",
+                        err_msg,
+                        "NO",
+                    ],
+                )
+                err_count += 1
+    print(f"Report:\n\t")
+    print(f"success: {succ_count} ({succ_fh})\n")
+    print(f"\tOCLC in 035 only: {inval_oclc_loc_count} ({inval_oclc_fh})\n")
+    print(f"\tmissing OCLC#: {miss_oclc_count} ({miss_oclc_fh})\n")
+    print(f"\trejected: {err_count} ({err_fh})")
 
 
 def google_reconciliation_to_barcodes_lst(fh: str) -> list[str]:
