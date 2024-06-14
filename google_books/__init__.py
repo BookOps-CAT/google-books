@@ -10,6 +10,7 @@ from google_books.manifest import (
     prep_onsite_manifest_for_google,
     prep_recap_manifest_for_sierra_list,
 )
+from google_books.picklist import prep_item_list_for_sierra
 
 
 __version__ = "0.1.0"
@@ -75,6 +76,20 @@ def onsite_manifest(filename: str) -> None:
     """
     out = prep_onsite_manifest_for_google(filename)
     click.echo(f"Prepped manifest was saved to {out.resolve()}")
+
+
+@cli.command()
+@click.argument("tar_file", type=click.Path(exists=True))
+def get_candidate_items(tar_file: str) -> None:
+    """
+    Prepares the item list for Sierra based on Google Candidate list _combined tar file.
+    Creates `nypl-YYYY-MM-DD-candidate-items.csv` file with item numbers in the `picklist`
+    folder.
+    Args:
+        tar_file (str): The tar file containing the candidate list.
+    """
+    prep_item_list_for_sierra(tar_file)
+    click.echo("Candidate items have been saved to files/picklist/ directory.")
 
 
 @cli.command()
