@@ -52,6 +52,7 @@ $ google-books oclc [MARC21 FILE PATH]
 #### Catalog Record URL
 https://catalog.hathitrust.org/Record/[cid]
 https://babel.hathitrust.org/cgi/pt?id=nyp.[barcode]
+http://hdl.handle.net/2027/nyp.[barcode]
 
 example:
 https://catalog.hathitrust.org/Record/100405490
