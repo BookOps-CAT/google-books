@@ -95,7 +95,7 @@ def parse_hathi_processing_report(fh: str) -> None:
 
 def google_reconciliation_to_barcodes_lst(fh: str) -> list[str]:
     """
-    Parses Google's *FOreconciled.txt report and returns a list
+    Parses Google's *FOreconciled.txt report and returns a list. The list is deduped.
 
     Args:
         fh:             path to google reconciliation report
@@ -103,13 +103,13 @@ def google_reconciliation_to_barcodes_lst(fh: str) -> list[str]:
     Returns:
         A list of rejected barcodes
     """
-    barcodes = []
+    barcodes = set()
     with open(fh, "r") as report:
         reader = csv.reader(report)
         next(reader)
         for row in reader:
-            barcodes.append(row[0])
-    return barcodes
+            barcodes.add(row[0])
+    return list(barcodes)
 
 
 def clean_metadata_for_hathi_submission(
@@ -124,6 +124,7 @@ def clean_metadata_for_hathi_submission(
         google_report:      path to google reconciliation FO report
     """
     rejected_barcodes = google_reconciliation_to_barcodes_lst(google_report)
+    print(f"Rejected {len(rejected_barcodes)} barcode(s).")
     bibs = marcxml_reader(marcxml)
 
     bibs2keep = []
