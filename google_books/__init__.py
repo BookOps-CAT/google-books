@@ -95,11 +95,17 @@ def get_candidate_items(tar_file: str, list_size: int) -> None:
 
 @cli.command()
 @click.argument("marcxml_submitted", type=click.Path(exists=True))
-@click.argument("marcxml_errors", type=click.Path(exists=True))
+@click.argument("marcxml_errors")
 @click.argument("out", type=click.Path())
 def hathi_urls(marcxml_submitted: str, marcxml_errors: str, out: str) -> None:
     """
     Creates stub MARC21 records with generated 856 for HathiTrust URLs.
+
+    Args:
+        marcxml_submitted:      path to MARCXML file submitted to HathiTrust
+        marcxml_errors:         path to Hathi's MARCXML with invalid records; use 'clean' to skip
+                                when no errors
+        out:                    path to MARC21 file with output stub records
     """
     create_stub_hathi_records(marcxml_submitted, marcxml_errors, out)
     click.echo(f"Stub records with HathiTrust URL have been saved to {out}.")
