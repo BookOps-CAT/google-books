@@ -143,7 +143,10 @@ def create_stub_hathi_records(
         marcxml_errors:         path to Hathi's MARCXML with invalid records
         out:                    path to MARC21 file with output stub records
     """
-    invalid_bibs = get_invalid_bib_nos(marcxml_errors)
+    if marcxml_errors == "clean":
+        invalid_bibs = []
+    else:
+        invalid_bibs = get_invalid_bib_nos(marcxml_errors)
     print(f"Found {len(invalid_bibs)} rejected record(s) by Zephir.")
     total_out_bibs = Counter()  # type: ignore
 
