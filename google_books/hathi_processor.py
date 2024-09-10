@@ -137,4 +137,5 @@ def clean_metadata_for_hathi_submission(
             except AttributeError:
                 continue
 
+    print(f"Saving {len(bibs2keep)} items to {out}")
     save2marcxml(out, bibs2keep)
