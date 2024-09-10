@@ -109,7 +109,7 @@ def google_reconciliation_to_barcodes_lst(fh: str) -> list[str]:
         next(reader)
         for row in reader:
             barcodes.add(row[0])
-    return list(barcodes)
+    return sorted(list(barcodes))
 
 
 def clean_metadata_for_hathi_submission(

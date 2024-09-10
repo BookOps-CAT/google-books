@@ -50,7 +50,9 @@ def test_find_err_msg(arg, expectation):
 
 def test_google_reconciliation_to_barcodes_lst():
     sample_report = "tests/google-reconciliation-FO-report-sample.txt"
-    assert google_reconciliation_to_barcodes_lst(sample_report) == [
-        "33433004338053",
-        "33433004727081",
-    ]
+    assert google_reconciliation_to_barcodes_lst(sample_report) == sorted(
+        [
+            "33433004338053",
+            "33433004727081",
+        ]
+    )
