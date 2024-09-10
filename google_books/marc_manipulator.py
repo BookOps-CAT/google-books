@@ -113,7 +113,7 @@ def generate_hathi_url(
     else:
         subfields.append(Subfield("z", "Full text available via HathiTrust"))
 
-    return Field(tag="856", indicators=["4", "0"], subfields=subfields)
+    return Field(tag="856", indicators=["4", "1"], subfields=subfields)
 
 
 def is_item_field(field: Field) -> bool:
