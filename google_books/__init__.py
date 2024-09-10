@@ -103,8 +103,8 @@ def hathi_urls(marcxml_submitted: str, marcxml_errors: str, out: str) -> None:
 
     Args:
         marcxml_submitted:      path to MARCXML file submitted to HathiTrust
-        marcxml_errors:         path to Hathi's MARCXML with invalid records; use 'clean' to skip
-                                when no errors
+        marcxml_errors:         path to Hathi's MARCXML with invalid records;
+                                use 'clean' to skip when no errors
         out:                    path to MARC21 file with output stub records
     """
     create_stub_hathi_records(marcxml_submitted, marcxml_errors, out)
