@@ -40,6 +40,7 @@ def prep_item_list_for_sierra(tar_file: str, list_size: int) -> None:
     files = glob.glob("files/picklist/*_combined-*.txt")
     n = -1
     s = 1
+    print(f"Outputting to file: {str(s).zfill(3)}...")
     for f in files:
         reader = csv.reader(open(f, "r", encoding="utf-8"), delimiter="\t")
         for row in reader:
@@ -60,7 +61,7 @@ def prep_sierra_export_for_dataframe(fh: str, date: str) -> None:
 
     Args:
         fh (str): The path to the Sierra export file
-        date (str): The date of the export in the fomrmat YYYY-MM-DD
+        date (str): The date of the export in the format YYYY-MM-DD
     """
     with open(fh, "r", encoding="utf-8", errors="replace") as f:
         reader = csv.reader(f, delimiter="\t")
