@@ -7,6 +7,7 @@ import csv
 import glob
 import tarfile
 from itertools import islice
+import re
 
 from google_books.utils import fh_date, save2csv
 
@@ -54,6 +55,21 @@ def prep_item_list_for_sierra(tar_file: str, list_size: int) -> None:
             save2csv(out, ",", [item])
 
 
+def is_oversized(value: str) -> bool:
+    """
+    Checks if extend in 300 $c indicates oversized item that Google won't be able
+    to scan.
+
+    Args:
+        value (str): The value of the 300 $c
+    """
+    pattern = re.compile(r"(\d{1,})(\s.*)")
+    if match := pattern.match(value):
+        print(int(match.group(1)))
+        return int(match.group(1)) >= 32
+    return False  # if no info treat as not oversized and let pickers decide
+
+
 def prep_sierra_export_for_dataframe(fh: str, date: str) -> None:
     """
     Transforms a given Sierra export file to a format that can be used to create
@@ -71,11 +87,17 @@ def prep_sierra_export_for_dataframe(fh: str, date: str) -> None:
                 assert len(row[14:]) % 7 == 0
             except AssertionError:
                 print(row[0], len(row), len(row[14:]))
+                save2csv(
+                    f"files/picklist/candidate-siera-export-error-{date}.csv",
+                    "\t",
+                    [row[0], len(row), len(row[14])],
+                )
+            oversized = is_oversized(row[19])
             linked_bibs_no = int(len(row[14:]) / 7)
             clean_bib_codes = [i for i in islice(row[14:], 0, None, linked_bibs_no)]
-            new_row = row[:14] + clean_bib_codes
+            new_row = row[:14] + [oversized, clean_bib_codes]
             save2csv(
-                f"files/picklist/candidate-sierra-export-clean-{date}.txt",
+                f"files/picklist/candidate-sierra-export-clean-{date}.csv",
                 "\t",
                 new_row,
             )
