@@ -59,15 +59,32 @@ def is_oversized(value: str) -> bool:
     """
     Checks if extend in 300 $c indicates oversized item that Google won't be able
     to scan.
+    Google guidelines specifies oversized items as follows:
+        + height is 32 cm or above
+        + length is 46 cm or above
+        + thickness is 13 cm or above
 
     Args:
         value (str): The value of the 300 $c
     """
-    pattern = re.compile(r"(\d{1,})(\s.*)")
-    if match := pattern.match(value):
-        print(int(match.group(1)))
-        return int(match.group(1)) >= 32
-    return False  # if no info treat as not oversized and let pickers decide
+    height_pattern = re.compile(r"^(\d{1,})(\s.*)")
+    length_pattern = re.compile(r"$(.*x\s)(\d{1,2})([-\s].*)")
+    thickness_pattern = re.compile(r"^(.*x.*x\s)(\d{1,2})(.*)")
+
+    results = []
+
+    if match := height_pattern.match(value):
+        print(f"height: {match.group(1)}")
+        results.append(int(match.group(1)) >= 32)
+    if match := length_pattern.match(value):
+        print(f"length: {match.group(2)}")
+        results.append(int(match.group(2)) >= 46)
+    if match := thickness_pattern.match(value):
+        print(f"thickness: {match.group(2)}")
+        results.append(int(match.group(2)) >= 13)
+
+    print(results)
+    return any(results)
 
 
 def prep_sierra_export_for_dataframe(fh: str, date: str) -> None:
@@ -82,22 +99,28 @@ def prep_sierra_export_for_dataframe(fh: str, date: str) -> None:
     with open(fh, "r", encoding="utf-8", errors="replace") as f:
         reader = csv.reader(f, delimiter="\t")
         next(reader)  # skip the header
-        for row in reader:
+        for n, row in enumerate(reader):
             try:
-                assert len(row[14:]) % 7 == 0
+                assert len(row[14:]) % 8 == 0
             except AssertionError:
-                print(row[0], len(row), len(row[14:]))
                 save2csv(
-                    f"files/picklist/candidate-siera-export-error-{date}.csv",
+                    f"files/picklist/candidates-siera-export-longrows-{date}.csv",
                     "\t",
                     [row[0], len(row), len(row[14])],
                 )
+            new_row = row[:14]
             oversized = is_oversized(row[19])
-            linked_bibs_no = int(len(row[14:]) / 7)
-            clean_bib_codes = [i for i in islice(row[14:], 0, None, linked_bibs_no)]
-            new_row = row[:14] + [oversized, clean_bib_codes]
+            new_row.append(oversized)
+            linked_bibs_no = int(len(row[14:]) / 8)
+
+            # move clean_bib_values to its own function for testing
+            clean_bib_values = [i for i in islice(row[14:], 0, None, linked_bibs_no)]
+            new_row.extend(clean_bib_values)
+            # print(list(enumerate(new_row)))
             save2csv(
-                f"files/picklist/candidate-sierra-export-clean-{date}.csv",
+                f"files/picklist/candidates-sierra-export-clean-{date}.csv",
                 "\t",
                 new_row,
             )
+            if n > 10000:
+                break
