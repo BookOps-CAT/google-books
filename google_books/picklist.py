@@ -55,35 +55,61 @@ def prep_item_list_for_sierra(tar_file: str, list_size: int) -> None:
             save2csv(out, ",", [item])
 
 
+def too_tall(value: str) -> bool:
+    """
+    Checks if the height of the item is 32 cm or above per Google guidelines.
+
+    Args:
+        value (str): The value of the 300 $c
+    """
+    pattern = re.compile(r"^(\d{1,2})(.*)")
+    if match := pattern.match(value):
+        return int(match.group(1)) >= 32
+    return False
+
+
+def too_wide(value: str) -> bool:
+    """
+    Checks if the width of the item is 24 cm or above per Google guidelines.
+
+    Args:
+        value (str): The value of the 300 $c
+    """
+    pattern = re.compile(r"^(.*x\s?)(\d{1,2})(.*)")
+    if match := pattern.match(value):
+        return int(match.group(2)) >= 46
+    return False
+
+
+def too_thick(value: str) -> bool:
+    """
+    Checks if the thickness of the item is 13 cm or above per Google guidelines.
+
+    Args:
+        value (str): The value of the 300 $c
+    """
+    pattern = re.compile(r"^(.*x.*x\s)(\d{1,2})(.*)")
+    if match := pattern.match(value):
+        return int(match.group(2)) >= 13
+    return False
+
+
 def is_oversized(value: str) -> bool:
     """
     Checks if extend in 300 $c indicates oversized item that Google won't be able
     to scan.
-    Google guidelines specifies oversized items as follows:
-        + height is 32 cm or above
         + length is 46 cm or above
         + thickness is 13 cm or above
 
     Args:
         value (str): The value of the 300 $c
     """
-    height_pattern = re.compile(r"^(\d{1,})(\s.*)")
-    length_pattern = re.compile(r"$(.*x\s)(\d{1,2})([-\s].*)")
-    thickness_pattern = re.compile(r"^(.*x.*x\s)(\d{1,2})(.*)")
 
     results = []
+    results.append(too_tall(value))
+    results.append(too_wide(value))
+    results.append(too_thick(value))
 
-    if match := height_pattern.match(value):
-        print(f"height: {match.group(1)}")
-        results.append(int(match.group(1)) >= 32)
-    if match := length_pattern.match(value):
-        print(f"length: {match.group(2)}")
-        results.append(int(match.group(2)) >= 46)
-    if match := thickness_pattern.match(value):
-        print(f"thickness: {match.group(2)}")
-        results.append(int(match.group(2)) >= 13)
-
-    print(results)
     return any(results)
 
 
@@ -97,9 +123,9 @@ def prep_sierra_export_for_dataframe(fh: str, date: str) -> None:
         date (str): The date of the export in the format YYYY-MM-DD
     """
     with open(fh, "r", encoding="utf-8", errors="replace") as f:
-        reader = csv.reader(f, delimiter="\t")
+        reader = csv.reader(f, delimiter="\t", quoting=csv.QUOTE_NONE)
         next(reader)  # skip the header
-        for n, row in enumerate(reader):
+        for row in reader:
             try:
                 assert len(row[14:]) % 8 == 0
             except AssertionError:
@@ -109,18 +135,21 @@ def prep_sierra_export_for_dataframe(fh: str, date: str) -> None:
                     [row[0], len(row), len(row[14])],
                 )
             new_row = row[:14]
-            oversized = is_oversized(row[19])
+            oversized = str(is_oversized(row[19]))
             new_row.append(oversized)
             linked_bibs_no = int(len(row[14:]) / 8)
 
             # move clean_bib_values to its own function for testing
-            clean_bib_values = [i for i in islice(row[14:], 0, None, linked_bibs_no)]
+            try:
+                clean_bib_values = [
+                    i for i in islice(row[14:], 0, None, linked_bibs_no)
+                ]
+            except ValueError:
+                print(f"Error in {row[0]}. Step: {linked_bibs_no}")
+                raise
             new_row.extend(clean_bib_values)
-            # print(list(enumerate(new_row)))
             save2csv(
                 f"files/picklist/candidates-sierra-export-clean-{date}.csv",
                 "\t",
                 new_row,
             )
-            if n > 10000:
-                break
