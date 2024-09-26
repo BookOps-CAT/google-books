@@ -17,7 +17,7 @@ def save2csv(dst_fh, delimiter, row):
             csvfile,
             delimiter=delimiter,
             lineterminator="\n",
-            quotechar='"',
+            quotechar="@",
             quoting=csv.QUOTE_MINIMAL,
         )
         try:
