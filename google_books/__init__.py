@@ -108,7 +108,7 @@ def clean_candidate_sierra_export(filename: str, date: str) -> None:
         date (str): The date of the export for the output file name
     """
     prep_sierra_export_for_dataframe(filename, date)
-    click.echo(f"Cleaned Sierra export was saved to files/picklist/ directory.")
+    click.echo("Cleaned Sierra export was saved to files/picklist/ directory.")
 
 
 @cli.command()
