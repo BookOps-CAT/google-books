@@ -10,7 +10,10 @@ from google_books.manifest import (
     prep_onsite_manifest_for_google,
     prep_recap_manifest_for_sierra_list,
 )
-from google_books.picklist import prep_item_list_for_sierra
+from google_books.picklist import (
+    prep_item_list_for_sierra,
+    prep_sierra_export_for_dataframe,
+)
 
 
 __version__ = "0.1.0"
@@ -81,7 +84,7 @@ def onsite_manifest(filename: str) -> None:
 @cli.command()
 @click.argument("tar_file", type=click.Path(exists=True))
 @click.argument("list_size", type=int, default=200000)
-def get_candidate_items(tar_file: str, list_size: int) -> None:
+def unpack_candidate_items(tar_file: str, list_size: int) -> None:
     """
     Prepares the item list for Sierra based on Google Candidate list _combined
     tar file. Creates `nypl-YYYY-MM-DD-candidate-items.csv` file with item numbers
@@ -91,6 +94,21 @@ def get_candidate_items(tar_file: str, list_size: int) -> None:
     """
     prep_item_list_for_sierra(tar_file, list_size)
     click.echo("Candidate items have been saved to files/picklist/ directory.")
+
+
+@cli.command()
+@click.argument("filename", type=click.Path(exists=True))
+@click.argument("date", type=str)
+def clean_candidate_sierra_export(filename: str, date: str) -> None:
+    """
+    Transforms a given Sierra export file to a format that can be used to create
+    `pandas.DataFrame` object. Will append data to the out file if already exists.
+    Args:
+        filename (str): The path to the Sierra export file
+        date (str): The date of the export for the output file name
+    """
+    prep_sierra_export_for_dataframe(filename, date)
+    click.echo(f"Cleaned Sierra export was saved to files/picklist/ directory.")
 
 
 @cli.command()
