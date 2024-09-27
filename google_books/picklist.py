@@ -70,7 +70,7 @@ def too_tall(value: str) -> bool:
 
 def too_wide(value: str) -> bool:
     """
-    Checks if the width of the item is 24 cm or above per Google guidelines.
+    Checks if the width of the item is 46 cm or above per Google guidelines.
 
     Args:
         value (str): The value of the 300 $c
