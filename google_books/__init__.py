@@ -125,6 +125,7 @@ def hathi_urls(marcxml_submitted: str, marcxml_errors: str, out: str) -> None:
                                 use 'clean' to skip when no errors
         out:                    path to MARC21 file with output stub records
     """
+    click.echo("Cleaning up Sierra export. This may take several minutes...")
     create_stub_hathi_records(marcxml_submitted, marcxml_errors, out)
     click.echo(f"Stub records with HathiTrust URL have been saved to {out}.")
 
