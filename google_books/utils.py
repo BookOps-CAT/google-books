@@ -1,5 +1,6 @@
 import csv
 from datetime import datetime
+import warnings
 
 import click
 
@@ -23,7 +24,7 @@ def save2csv(dst_fh, delimiter, row):
         try:
             out.writerow(row)
         except UnicodeEncodeError:
-            pass
+            warnings.warn(f"Could not write {row[0]} to {dst_fh}")
 
 
 def fh_date(fh: str) -> str:
