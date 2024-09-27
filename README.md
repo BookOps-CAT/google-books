@@ -70,3 +70,10 @@ https://babel.hathitrust.org/cgi/pt?id=nyp.33433105117174
   + It appears it does not matter
 + Zephir gives the following submission warning: WARNING: -d nyp_20231208_google run option is not YYYYMMDD: using 20231208 . Is this relevant? Submissions are getting processed and we follow the file name convention specified in the docs.
 + Zephir gives the following submission warning: WARNING: using namespace nyp for NUC code in 852. What is this about?
+
+### To-do
++ redo logic for exclusion of bibs from Hathi submissions based on Google FO reconciliation reports, use instead data from GRIN
++ verify 856's HathiTrust links were added to correct bibs from Nov 23
++ add notes about material's poor condition to items in Sierra based on GRIN's rejections (condition 25)
++ add more tests & increase test coverage
++ complete documentation
