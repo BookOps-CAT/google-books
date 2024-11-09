@@ -127,22 +127,23 @@ def prep_sierra_export_for_dataframe(fh: str, date: str) -> None:
         next(reader)  # skip the header
         for row in reader:
             try:
-                assert len(row[14:]) % 8 == 0
+                assert len(row[15:]) % 8 == 0
             except AssertionError:
                 save2csv(
                     f"files/picklist/candidates-siera-export-longrows-{date}.csv",
                     "\t",
                     [row[0], len(row), len(row[14])],
                 )
-            new_row = row[:14]
+            new_row = row[:15]
             oversized = str(is_oversized(row[19]))
             new_row.append(oversized)
-            linked_bibs_no = int(len(row[14:]) / 8)
+            linked_bibs_no = int(len(row[15:]) / 8)
+            new_row.append(linked_bibs_no)
 
             # move clean_bib_values to its own function for testing
             try:
                 clean_bib_values = [
-                    i for i in islice(row[14:], 0, None, linked_bibs_no)
+                    i for i in islice(row[15:], 0, None, linked_bibs_no)
                 ]
             except ValueError:
                 print(f"Error in {row[0]}. Step: {linked_bibs_no}")
