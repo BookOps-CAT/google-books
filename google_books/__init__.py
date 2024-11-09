@@ -99,7 +99,7 @@ def unpack_candidate_items(tar_file: str, list_size: int) -> None:
 @cli.command()
 @click.argument("filename", type=click.Path(exists=True))
 @click.argument("date", type=str)
-def clean_candidate_sierra_export(filename: str, date: str) -> None:
+def clean_candidates_sierra_export(filename: str, date: str) -> None:
     """
     Transforms a given Sierra export file to a format that can be used to create
     `pandas.DataFrame` object. Will append data to the out file if already exists.
