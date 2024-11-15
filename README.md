@@ -58,6 +58,9 @@ example:
 https://catalog.hathitrust.org/Record/100405490
 https://babel.hathitrust.org/cgi/pt?id=nyp.33433105117174
 
+### Google Books
+http://books.google.com/books?vid=NYPL:[Barcode]
+
 
 ### Questions
 + When ingested records show up in HathiTrust?
