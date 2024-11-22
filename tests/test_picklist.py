@@ -1,6 +1,13 @@
 import pytest
 
-from google_books.picklist import is_oversized, too_tall, too_wide, too_thick
+from google_books.picklist import (
+    is_oversized,
+    too_tall,
+    too_wide,
+    too_thick,
+    get_number_of_linked_bibs,
+    get_clean_bib_values,
+)
 
 
 @pytest.mark.parametrize(
@@ -76,3 +83,45 @@ def test_too_thick(arg, expectation):
 )
 def test_is_oversized(arg, expectation):
     assert is_oversized(arg) == expectation
+
+
+@pytest.mark.parametrize(
+    "arg,expectation",
+    [(["foo"] * 14, 0), (["foo"] * 23, 1), (["foo"] * 31, 2), (["foo"] * 39, 3)],
+)
+def test_get_number_of_linked_bibs(arg, expectation):
+    assert get_number_of_linked_bibs(arg) == expectation
+
+
+def test_get_number_of_linked_bibs_real_data_single_bib(stub_row_one_bib):
+    assert get_number_of_linked_bibs(stub_row_one_bib) == 1
+
+
+def test_get_number_of_linked_bibs_real_data_linked_bibs(stub_row_linked_bibs):
+    assert get_number_of_linked_bibs(stub_row_linked_bibs) == 2
+
+
+def test_get_clean_bib_values_single_bib(stub_row_one_bib):
+    assert get_clean_bib_values(stub_row_one_bib, 1) == [
+        "u",
+        "1888",
+        "9999",
+        "25 cm.",
+        "Report of meeting.",
+        "Sydney : [The Association], 1888-",
+        "*EC.A939",
+        "*EC.A939",
+    ]
+
+
+def test_get_clean_bib_values_linked_bibs(stub_row_linked_bibs):
+    assert get_clean_bib_values(stub_row_linked_bibs, 2) == [
+        "c",
+        "1965",
+        "19uu",
+        "",
+        "Supplementary volume.",
+        "Cambridge, Eng.: Trinity College.",
+        "L-10 9215 Library has: 1-24 (Incomplete). Some vols. classed separately.",
+        "L-10 9215 Library has: 1-24 (Incomplete). Some vols. classed separately.",
+    ]

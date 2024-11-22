@@ -11,6 +11,32 @@ import re
 
 from google_books.utils import fh_date, save2csv
 
+SIERRA_EXPORT_FIELDS = [
+    "RECORD #(ITEM)",
+    "ICODE2",
+    "I TYPE",
+    "LOCATION",
+    "STATUS",
+    "IMESSAGE",
+    "OPACMSG",
+    "AGENCY",
+    "TOT CHKOUT",
+    "BARCODE",
+    "UNIT/INIT",
+    "CALL #(ITEM)",
+    "VOLUME",
+    "INT NOTE",
+    "MESSAGE(ITEM)",
+    "008 Dat Type",
+    "008 Date One",
+    "008 Date Two",
+    "300|c",
+    "245",
+    "260",
+    "CALL #(BIBLIO)",
+    "STAFFCALL#",
+]
+
 
 def extract_candidate_list(tar_file: str) -> None:
     """
@@ -113,6 +139,27 @@ def is_oversized(value: str) -> bool:
     return any(results)
 
 
+def get_number_of_linked_bibs(row: list) -> int:
+    """
+    Returns the number of linked bibs in the given row.
+
+    Args:
+        row (list): A row from the Sierra export file
+    """
+    return int(len(row[15:]) / 8)
+
+
+def get_clean_bib_values(row: list, linked_bibs_no: int) -> list:
+    """
+    Returns the clean bib values from the given row.
+
+    Args:
+        row (list): A row from the Sierra export file
+        linked_bibs_no (int): The number of linked bibs in the row
+    """
+    return [i for i in islice(row[15:], 0, None, linked_bibs_no)]
+
+
 def prep_sierra_export_for_dataframe(fh: str, date: str) -> None:
     """
     Transforms a given Sierra export file to a format that can be used to create
@@ -124,7 +171,17 @@ def prep_sierra_export_for_dataframe(fh: str, date: str) -> None:
     """
     with open(fh, "r", encoding="utf-8", errors="replace") as f:
         reader = csv.reader(f, delimiter="\t", quoting=csv.QUOTE_NONE)
-        next(reader)  # skip the header
+        header = next(reader)
+
+        try:
+            assert header == SIERRA_EXPORT_FIELDS
+        except AssertionError:
+            print(
+                "Exported from Sierra fields don't match expected elements."
+                "Use saved export named: HEIDE Google pick list."
+            )
+            raise
+
         for row in reader:
             try:
                 assert len(row[15:]) % 8 == 0
@@ -132,19 +189,17 @@ def prep_sierra_export_for_dataframe(fh: str, date: str) -> None:
                 save2csv(
                     f"files/picklist/candidates-siera-export-longrows-{date}.csv",
                     "\t",
-                    [row[0], len(row), len(row[14])],
+                    [row[0], len(row), len(row[15])],
                 )
             new_row = row[:15]
-            oversized = str(is_oversized(row[19]))
+            oversized = str(is_oversized(row[18]))
             new_row.append(oversized)
-            linked_bibs_no = int(len(row[15:]) / 8)
+            linked_bibs_no = get_number_of_linked_bibs(row)
             new_row.append(linked_bibs_no)
 
             # move clean_bib_values to its own function for testing
             try:
-                clean_bib_values = [
-                    i for i in islice(row[15:], 0, None, linked_bibs_no)
-                ]
+                clean_bib_values = get_clean_bib_values(row, linked_bibs_no)
             except ValueError:
                 print(f"Error in {row[0]}. Step: {linked_bibs_no}")
                 raise
