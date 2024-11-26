@@ -5,6 +5,7 @@ from google_books.hathi_processor import (
     find_cid,
     find_err_msg,
     google_reconciliation_to_barcodes_lst,
+    get_hathi_meta_destination,
 )
 
 
@@ -56,3 +57,8 @@ def test_google_reconciliation_to_barcodes_lst():
             "33433004727081",
         ]
     )
+
+
+def test_get_hathi_meta_destination():
+    fh = get_hathi_meta_destination("files/hathi/Google-meta/NYPL_20240816.xml")
+    print(f"out: {fh}")

@@ -1,4 +1,6 @@
 import csv
+from pathlib import Path
+from typing import Optional
 
 from google_books.marc_manipulator import marcxml_reader, save2marcxml
 from google_books.utils import save2csv, fh_date
@@ -95,7 +97,7 @@ def parse_hathi_processing_report(fh: str) -> None:
 
 def google_reconciliation_to_barcodes_lst(fh: str) -> list[str]:
     """
-    Parses Google's *FOreconciled.txt report and returns a list. The list is deduped.
+    Parses GRIN report of not scanned by Google items and returns a list. The list is deduped.
 
     Args:
         fh:             path to google reconciliation report
@@ -108,23 +110,40 @@ def google_reconciliation_to_barcodes_lst(fh: str) -> list[str]:
         reader = csv.reader(report)
         next(reader)
         for row in reader:
-            barcodes.add(row[0])
+            barcodes.add(row[0].strip())
     return sorted(list(barcodes))
 
 
+def get_hathi_meta_destination(source: str) -> Path:
+    """
+    Creates path to output file for HathiTrust metadata.
+
+    Args:
+        source:         path of MARCXML file used to submit metadata to Google
+    """
+    source_path = Path(source)
+    fh = source_path.name
+    target_dir = "files/Hathi/meta/"
+    target_date = ""
+
+
 def clean_metadata_for_hathi_submission(
-    marcxml: str, google_report: str, out: str
+    marcxml: str, grin_report: str, out: Optional[str] = None
 ) -> None:
     """
-    Using Google's reconciliation FO report removes from a given metadata file records
+    Using GRIN's not scanned report removes from a given metadata file records
     that include rejected for digitization items (barcodes).
 
     Args:
         marcxml:            path to marcxml file with records
-        google_report:      path to google reconciliation FO report
+        grin_report:        path to GRIN text file that includes rejected by Google
+                            items as not scannable
+        out:                path to the resulting marcxml file (optional)
     """
-    rejected_barcodes = google_reconciliation_to_barcodes_lst(google_report)
-    print(f"Rejected {len(rejected_barcodes)} barcode(s).")
+    if not out:
+        out = get_hathi_meta_handle(marcxml)
+
+    rejected_barcodes = google_reconciliation_to_barcodes_lst(grin_report)
     bibs = marcxml_reader(marcxml)
 
     bibs2keep = []
