@@ -76,7 +76,7 @@ def stub_row_linked_bibs():
         "",
         "21 cm.",
         "Supplementary volume.",
-        "Studies in Latin literature and its tradition : in honour of C.O. Brink / edited by J. Diggle, J.B. Hall, and H.D. Jocelyn.",
+        "Studies in Latin literature and its tradition : in honour of C.O. Brink / edited by J. Diggle, J.B. Hall, and H.D. Jocelyn.",  # noqa: E501
         "Cambridge, Eng.: Trinity College.",
         "Cambridge [England] : Cambridge Philological Society, 1989.",
         "L-10 9215 Library has: 1-24 (Incomplete). Some vols. classed separately.",
