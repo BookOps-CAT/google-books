@@ -97,7 +97,8 @@ def parse_hathi_processing_report(fh: str) -> None:
 
 def google_reconciliation_to_barcodes_lst(fh: str) -> list[str]:
     """
-    Parses GRIN report of not scanned by Google items and returns a list. The list is deduped.
+    Parses GRIN report of not scanned by Google items and returns a list.
+    The list is deduped.
 
     Args:
         fh:             path to google reconciliation report
@@ -121,10 +122,13 @@ def get_hathi_meta_destination(source: str) -> Path:
     Args:
         source:         path of MARCXML file used to submit metadata to Google
     """
-    source_path = Path(source)
-    fh = source_path.name
-    target_dir = "files/Hathi/meta/"
-    target_date = ""
+    pass
+
+
+#     source_path = Path(source)
+#     fh = source_path.name
+#     target_dir = "files/Hathi/meta/"
+#     target_date = ""
 
 
 def clean_metadata_for_hathi_submission(
@@ -141,7 +145,7 @@ def clean_metadata_for_hathi_submission(
         out:                path to the resulting marcxml file (optional)
     """
     if not out:
-        out = get_hathi_meta_handle(marcxml)
+        out = get_hathi_meta_destination(marcxml)
 
     rejected_barcodes = google_reconciliation_to_barcodes_lst(grin_report)
     bibs = marcxml_reader(marcxml)
