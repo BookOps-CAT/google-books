@@ -1,5 +1,6 @@
 import click
 
+from google_books.errors import FileNameError
 from google_books.hathi_processor import (
     parse_hathi_processing_report,
     clean_metadata_for_hathi_submission,
@@ -77,8 +78,11 @@ def onsite_manifest(filename: str) -> None:
     """
     Preps Sierra item export for submission to Google
     """
-    out = prep_onsite_manifest_for_google(filename)
-    click.echo(f"Prepped manifest was saved to {out.resolve()}")
+    try:
+        out = prep_onsite_manifest_for_google(filename)
+        click.echo(f"Prepped manifest was saved to {out.resolve()}")
+    except FileNameError:
+        raise
 
 
 @cli.command()
