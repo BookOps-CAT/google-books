@@ -1,8 +1,7 @@
 import csv
-from datetime import datetime
 from pathlib import Path
 import re
-from typing import Optional
+from typing import Optional, Union
 import warnings
 
 
@@ -28,19 +27,25 @@ def save2csv(dst_fh, delimiter, row):
             warnings.warn(f"Could not write {row[0]} to {dst_fh}")
 
 
-def create_directory(dir_parent: Path, dir_name: str) -> None:
+def create_directory(dir_parent: Path, dir_name: str) -> Path:
     dir_path = Path(dir_parent).joinpath(dir_name)
-    dir_path.mkdir()
+    try:
+        dir_path.mkdir()
+    except FileExistsError:
+        pass
+    return dir_path
 
 
-def fh_date(fh: str) -> Optional[str]:
+def fh_date(fh: Union[str, Path]) -> Optional[str]:
     """
     Determines date element in the given file name
 
     Args:
         fh: str, file handle
     """
-    fh_name = Path(fh).stem
+    if isinstance(fh, str):
+        fh_path = Path(fh)
+    fh_name = fh_path.stem
     pattern = re.compile(r"(\D)(\d{8})(\D|$)")
     match = re.search(pattern, fh_name)
     if match:
