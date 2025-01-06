@@ -3,7 +3,7 @@ from pathlib import Path
 from typing import Optional
 
 from google_books.marc_manipulator import marcxml_reader, save2marcxml
-from google_books.utils import save2csv, fh_date
+from google_books.utils import save2csv, fh_date, shipment_date_obj
 
 
 def find_bibno(line: str) -> str:
@@ -115,20 +115,18 @@ def google_reconciliation_to_barcodes_lst(fh: str) -> list[str]:
     return sorted(list(barcodes))
 
 
-def get_hathi_meta_destination(source: str) -> Path:
+def get_hathi_meta_destination(shipment_date: str) -> Path:
     """
     Creates path to output file for HathiTrust metadata.
 
     Args:
-        source:         path of MARCXML file used to submit metadata to Google
+        shipment_date:      date (YYYYMMDD format) which corresponds to
+                            files/shipments/YYYY-MM-DD directory
     """
-    pass
-
-
-#     source_path = Path(source)
-#     fh = source_path.name
-#     target_dir = "files/Hathi/meta/"
-#     target_date = ""
+    date = shipment_date_obj(shipment_date)
+    return Path(f"files/shipments/{date:%Y-%m-%d}").joinpath(
+        f"nyp_{date:%Y%m%d}_google.xml"
+    )
 
 
 def clean_metadata_for_hathi_submission(

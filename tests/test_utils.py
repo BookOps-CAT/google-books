@@ -1,8 +1,11 @@
 from contextlib import nullcontext as does_not_raise
+from datetime import date
+
 import pytest
 
 
-from google_books.utils import create_directory, fh_date
+from google_books.utils import create_directory, fh_date, shipment_date_obj
+from google_books.errors import FileNameError
 
 
 @pytest.mark.parametrize(
@@ -26,3 +29,21 @@ def test_fh_date(arg, expectation):
 def test_create_dir(tmp_path):
     with does_not_raise():
         create_directory(tmp_path, "foo")
+
+
+@pytest.mark.parametrize(
+    "arg,expectation",
+    [
+        ("20241201", date(2024, 12, 1)),
+    ],
+)
+def test_shipment_date_obj_success(arg, expectation):
+    assert shipment_date_obj(arg) == expectation
+
+
+@pytest.mark.parametrize(
+    "arg", [None, {}, "241231", "NYPL_240816.xml", "nypl_2024-08-12.xml", "foo.xml"]
+)
+def test_shipment_date_obj_type_error(arg):
+    with pytest.raises(FileNameError):
+        shipment_date_obj(arg)

@@ -1,8 +1,11 @@
 import csv
+import datetime
 from pathlib import Path
 import re
 from typing import Optional, Union
 import warnings
+
+from .errors import FileNameError
 
 
 def save2csv(dst_fh, delimiter, row):
@@ -52,3 +55,22 @@ def fh_date(fh: Union[str, Path]) -> Optional[str]:
         return match.group(2)
     else:
         return None
+
+
+def shipment_date_obj(shipment_date: str) -> datetime.date:
+    """
+    Converts date element of the file name into a `datetime.date` instance
+
+    Args:
+        date_str: shipments date as a str in 'YYYYMMDD' format
+
+    Returns:
+        `datetime.date` instance
+    """
+    try:
+        return datetime.datetime.strptime(shipment_date, "%Y%m%d").date()
+    except (TypeError, ValueError):
+        raise FileNameError(
+            "Given file handle has incorrectly coded date. Format should be: "
+            "YYYYMMDD."
+        )
