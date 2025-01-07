@@ -1,5 +1,6 @@
 from collections import Counter
-from typing import Optional, Iterator
+from pathlib import Path
+from typing import Optional, Iterator, Union
 import warnings
 
 from pymarc import MARCReader, Record, Field, Subfield, XMLWriter, parse_xml_to_array
@@ -200,13 +201,13 @@ def get_invalid_bib_nos(marcxml_error: str) -> list[str]:
         return []
 
 
-def marcxml_reader(fh: str) -> Iterator[Record]:
+def marcxml_reader(fh: Union[str, Path]) -> Iterator[Record]:
     reader = parse_xml_to_array(fh)
     for bib in reader:
         yield bib
 
 
-def save2marcxml(marcxml: str, bibs: list[Record]) -> None:
+def save2marcxml(marcxml: Union[str, Path], bibs: list[Record]) -> None:
     writer = XMLWriter(open(marcxml, "ab"))
     for bib in bibs:
         writer.write(bib)

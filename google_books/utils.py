@@ -43,7 +43,7 @@ def create_shipment_directory(
     shipment_date: str, parent_dir: str = "files/shipments"
 ) -> Path:
     date = shipment_date_obj(shipment_date)
-    ship_dir = create_directory(Path(parent_dir), f"{date:%Y-%m-%d}")
+    ship_dir = create_directory(parent_dir, f"{date:%Y-%m-%d}")
     return ship_dir
 
 

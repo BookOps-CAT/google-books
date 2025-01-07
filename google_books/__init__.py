@@ -15,6 +15,7 @@ from google_books.picklist import (
     prep_item_list_for_sierra,
     prep_sierra_export_for_dataframe,
 )
+from google_books.utils import create_shipment_directory
 
 
 __version__ = "0.1.0"
@@ -36,20 +37,29 @@ def hathi_report(filename: str) -> None:
 
 
 @cli.command()
-@click.argument("marcxml", type=click.Path(exists=True))
-@click.argument("google_report", type=click.Path(exists=True))
-@click.argument("out", type=click.Path())
-def hathi_metadata_prep(marcxml: str, google_report: str, out: str):
+@click.argument("shipment_date")
+def hathi_metadata_prep(shipment_date: str):
     """
     Preps HathiTrust MARCXML file using Google FO reconciliation report by removing from
     it records/items that have not been digitized.
 
     Args:
-        marcxml:                MARCXML file used for Google submission
-        google_report:          Google FO reconciliation report
-        out:                    path to output MARCXML file
+        shipment_date:  date in the format YYYYMMDD
     """
-    clean_metadata_for_hathi_submission(marcxml, google_report, out)
+    clean_metadata_for_hathi_submission(shipment_date)
+
+
+@cli.command()
+@click.argument("shipment_date")
+def new_shipment(shipment_date: str):
+    """
+    Creates a new folder for shipment files.
+
+    Args:
+        shipment_date:  date in the format YYYYMMDD
+    """
+    ship_dir = create_shipment_directory(shipment_date)
+    click.echo(f"New shipment directory created at {ship_dir}")
 
 
 @cli.command()
@@ -63,23 +73,27 @@ def oclc(filename: str) -> None:
 
 
 @cli.command()
-@click.argument("filename", type=click.Path(exists=True))
-def recap_manifest(filename: str) -> None:
+@click.argument(
+    "shipment_date",
+)
+def recap_manifest(shipment_date: str) -> None:
     """
-    Preps ReCAP manifest for Sierra list creation
+    Preps ReCAP manifest for Sierra list creation.
+    Args:
+        shipment_date:  date in the format YYYYMMDD
     """
-    out = prep_recap_manifest_for_sierra_list(filename)
+    out = prep_recap_manifest_for_sierra_list(shipment_date)
     click.echo(f"Cleaned up manifest was saved to {out.resolve()}")
 
 
 @cli.command()
-@click.argument("filename", type=click.Path(exists=True))
-def onsite_manifest(filename: str) -> None:
+@click.argument("shipment_date")
+def onsite_manifest(shipment_date: str) -> None:
     """
     Preps Sierra item export for submission to Google
     """
     try:
-        out = prep_onsite_manifest_for_google(filename)
+        out = prep_onsite_manifest_for_google(shipment_date)
         click.echo(f"Prepped manifest was saved to {out.resolve()}")
     except FileNameError:
         raise

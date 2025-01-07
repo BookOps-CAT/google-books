@@ -1,3 +1,6 @@
+from pathlib import Path
+from datetime import date
+
 import pytest
 
 from google_books.hathi_processor import (
@@ -50,15 +53,14 @@ def test_find_err_msg(arg, expectation):
 
 
 def test_google_reconciliation_to_barcodes_lst():
-    sample_report = "tests/google-reconciliation-FO-report-sample.txt"
+    sample_report = Path("tests/_grin_query_sample.txt")
     assert google_reconciliation_to_barcodes_lst(sample_report) == sorted(
-        [
-            "33433004338053",
-            "33433004727081",
-        ]
+        ["33433124886338", "33433119947368", "33433116658661"]
     )
 
 
 def test_get_hathi_meta_destination():
-    fh = get_hathi_meta_destination("files/hathi/Google-meta/NYPL_20240816.xml")
-    print(f"out: {fh}")
+    ship_date = date(2024, 12, 31)
+    assert get_hathi_meta_destination(ship_date) == Path(
+        f"files/shipments/2024-12-31/nyp_20241231_google.xml"
+    )
