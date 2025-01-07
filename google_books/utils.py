@@ -39,6 +39,14 @@ def create_directory(dir_parent: Union[str, Path], dir_name: str) -> Path:
     return dir_path
 
 
+def create_shipment_directory(
+    shipment_date: str, parent_dir: str = "files/shipments"
+) -> Path:
+    date = shipment_date_obj(shipment_date)
+    ship_dir = create_directory(Path(parent_dir), f"{date:%Y-%m-%d}")
+    return ship_dir
+
+
 def fh_date(fh: Union[str, Path]) -> Optional[str]:
     """
     Determines date element in the given file name

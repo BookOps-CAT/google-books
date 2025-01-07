@@ -4,7 +4,12 @@ from datetime import date
 import pytest
 
 
-from google_books.utils import create_directory, fh_date, shipment_date_obj
+from google_books.utils import (
+    create_directory,
+    create_shipment_directory,
+    fh_date,
+    shipment_date_obj,
+)
 from google_books.errors import FileNameError
 
 
@@ -45,6 +50,12 @@ def test_create_dir_exists(tmp_path):
     with does_not_raise():
         output = create_directory(tmp_path, "foo")
     assert output == d
+
+
+def test_create_shipment_directory(tmp_path):
+    d = create_shipment_directory("20241231", tmp_path)
+    assert d.exists()
+    assert d == tmp_path / "2024-12-31"
 
 
 @pytest.mark.parametrize(
