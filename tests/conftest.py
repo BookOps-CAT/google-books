@@ -1,3 +1,5 @@
+from pathlib import Path
+
 from pymarc import Record, Field, Subfield
 import pytest
 
@@ -84,3 +86,10 @@ def stub_row_linked_bibs():
         "L-10 9215 Library has: 1-24 (Incomplete). Some vols. classed separately.",
         "L-10 9215 no. 15",
     ]
+
+
+@pytest.fixture
+def mock_shipments_dir(tmp_path) -> Path:
+    d = tmp_path / "2000-12-31"
+    d.mkdir()
+    return d
