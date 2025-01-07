@@ -62,5 +62,5 @@ def test_google_reconciliation_to_barcodes_lst():
 def test_get_hathi_meta_destination():
     ship_date = date(2024, 12, 31)
     assert get_hathi_meta_destination(ship_date) == Path(
-        f"files/shipments/2024-12-31/nyp_20241231_google.xml"
+        "files/shipments/2024-12-31/nyp_20241231_google.xml"
     )
