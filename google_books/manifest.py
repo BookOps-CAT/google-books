@@ -5,7 +5,6 @@ Onsite & ReCAP manifest manipulation scripts
 import csv
 from pathlib import Path
 
-from google_books.errors import FileNameError
 from google_books.utils import (
     save2csv,
     create_shipment_directory,
