@@ -135,7 +135,8 @@ def get_hathi_meta_destination(shipment_date: datetime.date) -> Path:
                             files/shipments/YYYY-MM-DD directory
     """
     return Path(
-        f"files/shipments/{shipment_date:%Y-%m-%d}/nyp_{shipment_date:%Y%m%d}_google.xml"
+        f"files/shipments/{shipment_date:%Y-%m-%d}/"
+        f"nyp_{shipment_date:%Y%m%d}_google.xml"
     )
 
 
