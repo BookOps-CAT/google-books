@@ -26,23 +26,37 @@ def test_fh_date(arg, expectation):
     assert fh_date(arg) == expectation
 
 
-def test_create_dir(tmp_path):
+def test_create_dir_with_path_obj(tmp_path):
+    output = create_directory(tmp_path, "foo")
+    assert output == tmp_path / "foo"
+
+
+def test_create_dir_with_str(tmp_path):
+    parent_str = str(tmp_path)
+    assert isinstance(parent_str, str)
+    output = create_directory(parent_str, "foo")
+    assert output == tmp_path / "foo"
+
+
+def test_create_dir_exists(tmp_path):
+    d = tmp_path / "foo"
+    d.mkdir()
+    assert d.exists()
     with does_not_raise():
-        create_directory(tmp_path, "foo")
+        output = create_directory(tmp_path, "foo")
+    assert output == d
 
 
 @pytest.mark.parametrize(
     "arg,expectation",
-    [
-        ("20241201", date(2024, 12, 1)),
-    ],
+    [("20241201", date(2024, 12, 1)), ("241231", date(2024, 12, 31))],
 )
 def test_shipment_date_obj_success(arg, expectation):
     assert shipment_date_obj(arg) == expectation
 
 
 @pytest.mark.parametrize(
-    "arg", [None, {}, "241231", "NYPL_240816.xml", "nypl_2024-08-12.xml", "foo.xml"]
+    "arg", [None, {}, "2412319", "NYPL_240816.xml", "nypl_2024-08-12.xml", "foo.xml"]
 )
 def test_shipment_date_obj_type_error(arg):
     with pytest.raises(FileNameError):

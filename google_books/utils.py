@@ -30,7 +30,7 @@ def save2csv(dst_fh, delimiter, row):
             warnings.warn(f"Could not write {row[0]} to {dst_fh}")
 
 
-def create_directory(dir_parent: Path, dir_name: str) -> Path:
+def create_directory(dir_parent: Union[str, Path], dir_name: str) -> Path:
     dir_path = Path(dir_parent).joinpath(dir_name)
     try:
         dir_path.mkdir()
@@ -68,7 +68,12 @@ def shipment_date_obj(shipment_date: str) -> datetime.date:
         `datetime.date` instance
     """
     try:
-        return datetime.datetime.strptime(shipment_date, "%Y%m%d").date()
+        if len(shipment_date) == 8:
+            return datetime.datetime.strptime(shipment_date, "%Y%m%d").date()
+        elif len(shipment_date) == 6:
+            return datetime.datetime.strptime(shipment_date, "%y%m%d").date()
+        else:
+            raise ValueError
     except (TypeError, ValueError):
         raise FileNameError(
             "Given file handle has incorrectly coded date. Format should be: "
