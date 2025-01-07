@@ -2,7 +2,6 @@ from collections import Counter
 import csv
 import datetime
 from pathlib import Path
-from typing import Optional
 
 from google_books.marc_manipulator import marcxml_reader, save2marcxml
 from google_books.utils import save2csv, fh_date, shipment_date_obj
