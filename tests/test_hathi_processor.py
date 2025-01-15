@@ -7,8 +7,9 @@ from google_books.hathi_processor import (
     find_bibno,
     find_cid,
     find_err_msg,
-    google_reconciliation_to_barcodes_lst,
     get_hathi_meta_destination,
+    get_checkin_range,
+    google_reconciliation_to_barcodes_lst,
 )
 
 
@@ -50,6 +51,16 @@ def test_find_cid_value_error():
 )
 def test_find_err_msg(arg, expectation):
     assert find_err_msg(arg) == expectation
+
+
+def test_get_checkin_range():
+    values = {
+        date(2024, 10, 11),
+        date(2024, 1, 1),
+        date(2024, 12, 31),
+        date(2024, 12, 28),
+    }
+    assert get_checkin_range(values) == (date(2024, 1, 1), date(2024, 12, 31))
 
 
 def test_google_reconciliation_to_barcodes_lst():
