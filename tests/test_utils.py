@@ -9,8 +9,9 @@ from google_books.utils import (
     create_shipment_directory,
     fh_date,
     shipment_date_obj,
+    timestamp_str2date,
 )
-from google_books.errors import FileNameError
+from google_books.errors import FileNameError, GoogleBooksToolError
 
 
 @pytest.mark.parametrize(
@@ -72,3 +73,14 @@ def test_shipment_date_obj_success(arg, expectation):
 def test_shipment_date_obj_type_error(arg):
     with pytest.raises(FileNameError):
         shipment_date_obj(arg)
+
+
+def test_timestamp_str2date_success():
+    assert timestamp_str2date("2024/10/17 23:39") == date(2024, 10, 17)
+
+
+@pytest.mark.parametrize("arg", [None, 123, "1969-07-21 T 02:56"])
+def test_timestamp_str2date_exceptions(arg):
+    with pytest.raises(GoogleBooksToolError) as exc:
+        timestamp_str2date(arg)
+    assert f"Error. Encountered invalid timestamp: `{arg}`." in str(exc.value)

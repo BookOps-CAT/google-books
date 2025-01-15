@@ -5,7 +5,7 @@ import re
 from typing import Optional, Union
 import warnings
 
-from .errors import FileNameError
+from .errors import FileNameError, GoogleBooksToolError
 
 
 def save2csv(dst_fh, delimiter, row):
@@ -86,4 +86,22 @@ def shipment_date_obj(shipment_date: str) -> datetime.date:
         raise FileNameError(
             "Given file handle has incorrectly coded date. Format should be: "
             "YYYYMMDD."
+        )
+
+
+def timestamp_str2date(timestamp: str) -> datetime.date:
+    """
+    Converts timestamp string to `datetime.date` instance
+
+    Args:
+        timestamp:      timestamp str in the following format: YYYY/MM/DD HH:MM
+
+    Returns:
+        `datetime.date` instance
+    """
+    try:
+        return datetime.datetime.strptime(timestamp, "%Y/%m/%d %H:%M").date()
+    except (TypeError, ValueError):
+        raise GoogleBooksToolError(
+            f"Error. Encountered invalid timestamp: `{timestamp}`."
         )
