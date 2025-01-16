@@ -27,13 +27,13 @@ def cli() -> None:
 
 
 @cli.command()
-@click.argument("filename", type=click.Path(exists=True))
-def hathi_report(filename: str) -> None:
+@click.argument("shipment_date")
+def hathi_report(shipment_date: str) -> None:
     """
     Run analysis of the HathiTrust/Zephir reports and create actionable data.
     Outputs reports to files/out/ directory.
     """
-    parse_hathi_processing_report(filename)
+    parse_hathi_processing_report(shipment_date)
 
 
 @cli.command()

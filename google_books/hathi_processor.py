@@ -36,24 +36,31 @@ def find_err_msg(line: str) -> str:
         return ""
 
 
-def parse_hathi_processing_report(fh: str) -> None:
+def parse_hathi_processing_report(shipment_date: str) -> None:
     """
     Parses Hathi job report and filters the results into three separate
     files: hathi-success.csv, hathi-unspecified-oclc.csv, hathi-missing-oclc.csv.
 
     Args:
-        fh:             path to processing report
+        shipment_date:      shipment date in the YYYYMMDD format
     """
-    date = fh_date(fh)
+    date = shipment_date_obj(shipment_date)
     succ_count = 0
-    succ_fh = f"files/out/hathi-{date}-success.csv"
+    succ_fh = f"files/shipments/{date:%Y-%m-%d}/hathi-{date:%Y%m%d}-success.csv"
     inval_oclc_loc_count = 0
-    inval_oclc_fh = f"files/out/hathi-{date}-unspecified-oclc.csv"
+    inval_oclc_fh = (
+        f"files/shipments/{date:%Y-%m-%d}/hathi-{date:%Y%m%d}-unspecified-oclc.csv"
+    )
     miss_oclc_count = 0
-    miss_oclc_fh = f"files/out/hathi-{date}-missing-oclc.csv"
+    miss_oclc_fh = (
+        f"files/shipments/{date:%Y-%m-%d}/hathi-{date:%Y%m%d}-missing-oclc.csv"
+    )
     err_count = 0
-    err_fh = f"files/out/hathi-{date}-errors.csv"
-    with open(fh, "r") as file:
+    err_fh = f"files/shipments/{date:%Y-%m-%d}/hathi-{date:%Y%m%d}-errors.csv"
+
+    source_fh = f"files/shipments/{date:%Y-%m-%d}/nyp_{date:%Y%m%d}_google.txt"
+
+    with open(source_fh, "r") as file:
         for line in file.readlines():
             if "new cid =" in line:
                 cid = find_cid(line)
@@ -91,7 +98,7 @@ def parse_hathi_processing_report(fh: str) -> None:
                     ],
                 )
                 err_count += 1
-    print("Report:\n\t")
+    print("Report:\t")
     print(f"success: {succ_count} ({succ_fh})\n")
     print(f"\tOCLC in 035 only: {inval_oclc_loc_count} ({inval_oclc_fh})\n")
     print(f"\tmissing OCLC#: {miss_oclc_count} ({miss_oclc_fh})\n")
