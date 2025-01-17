@@ -214,6 +214,6 @@ def save2marcxml(marcxml: Union[str, Path], bibs: list[Record]) -> None:
     writer.close()
 
 
-def append2marc(record: Record, out: str) -> None:
+def append2marc(record: Record, out: Union[str, Path]) -> None:
     with open(out, "ab") as marcfile:
         marcfile.write(record.as_marc())
