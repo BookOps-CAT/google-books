@@ -16,7 +16,7 @@ from google_books.picklist import (
     prep_item_list_for_sierra,
     prep_sierra_export_for_dataframe,
 )
-from google_books.utils import create_shipment_directory, shipment_date_obj
+from google_books.utils import get_directory, shipment_date_obj
 
 
 __version__ = "0.1.0"
@@ -68,15 +68,19 @@ def hathi_metadata_prep(shipment_date: str):
 
 @cli.command()
 @click.argument("shipment_date")
-def new_shipment(shipment_date: str):
+@click.argument("parent_dir", type=click.Path(), default="files/shipments")
+def new_shipment(shipment_date: str, parent_dir: str):
     """
     Creates a new folder for shipment files.
 
     Args:
         shipment_date:  date in the format YYYYMMDD
     """
-    ship_dir = create_shipment_directory(shipment_date)
-    click.echo(f"New shipment directory created at {ship_dir}")
+
+    date = shipment_date_obj(shipment_date)
+    folder = f"{date:%Y-%m-%d}"
+    shipment_directory = get_directory(parent_dir, folder)
+    click.echo(f"New shipment directory created at {shipment_directory}")
 
 
 @cli.command()

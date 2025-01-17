@@ -5,8 +5,7 @@ import pytest
 
 
 from google_books.utils import (
-    create_directory,
-    create_shipment_directory,
+    get_directory,
     fh_date,
     shipment_date_obj,
     timestamp_str2date,
@@ -33,14 +32,14 @@ def test_fh_date(arg, expectation):
 
 
 def test_create_dir_with_path_obj(tmp_path):
-    output = create_directory(tmp_path, "foo")
+    output = get_directory(tmp_path, "foo")
     assert output == tmp_path / "foo"
 
 
 def test_create_dir_with_str(tmp_path):
     parent_str = str(tmp_path)
     assert isinstance(parent_str, str)
-    output = create_directory(parent_str, "foo")
+    output = get_directory(parent_str, "foo")
     assert output == tmp_path / "foo"
 
 
@@ -49,14 +48,8 @@ def test_create_dir_exists(tmp_path):
     d.mkdir()
     assert d.exists()
     with does_not_raise():
-        output = create_directory(tmp_path, "foo")
+        output = get_directory(tmp_path, "foo")
     assert output == d
-
-
-def test_create_shipment_directory(tmp_path):
-    d = create_shipment_directory("20241231", tmp_path)
-    assert d.exists()
-    assert d == tmp_path / "2024-12-31"
 
 
 @pytest.mark.parametrize(

@@ -7,7 +7,7 @@ from pathlib import Path
 
 from google_books.utils import (
     save2csv,
-    create_shipment_directory,
+    get_directory,
     shipment_date_obj,
 )
 
@@ -20,12 +20,10 @@ def prep_onsite_manifest_for_google(shipment_date: str) -> Path:
     Args:
         shipment_date:  YYYYMMDD of the shipment
     """
-    shipment_date = shipment_date_obj(shipment_date)
-    shipment_directory = create_shipment_directory(shipment_date)
-    source_path = (
-        shipment_directory / f"SierraExportManifest_{shipment_date:%Y%m%d.txt}"
-    )
-    out_path = shipment_directory / f"NYPL_{shipment_date:%Y%m%d}.txt"
+    date = shipment_date_obj(shipment_date)
+    shipment_directory = get_directory("files/shipments", f"{date:%Y-%m-%d}")
+    source_path = shipment_directory / f"SierraExportManifest_{date:%Y%m%d.txt}"
+    out_path = shipment_directory / f"NYPL_{date:%Y%m%d}.txt"
 
     with source_path.open("r") as csvfile:
         data = csv.reader(csvfile, delimiter="\t")
@@ -49,9 +47,11 @@ def prep_recap_manifest_for_sierra_list(shipment_date: str) -> Path:
         `Path` instance to output file
     """
     date = shipment_date_obj(shipment_date)
-    shipment_dir = create_shipment_directory(f"{date:%Y-%m-%d}")
-    source_fh = Path(shipment_dir).joinpath(f"NYPL_{date:%Y%m%d}-ReCAP.txt")
-    out_path = Path(shipment_dir).joinpath(f"google-recap-barcodes-{date:%Y%m%D}.csv")
+    shipment_directory = get_directory("files/shipments", f"{date:%Y-%m-%d}")
+    source_fh = Path(shipment_directory).joinpath(f"NYPL_{date:%Y%m%d}-ReCAP.txt")
+    out_path = Path(shipment_directory).joinpath(
+        f"google-recap-barcodes-{date:%Y%m%D}.csv"
+    )
     with source_fh.open("r") as csvfile:
         manifest = csv.reader(csvfile, delimiter="\t")
         for row in manifest:
