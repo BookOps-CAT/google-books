@@ -5,7 +5,7 @@ import warnings
 
 from pymarc import MARCReader, Record, Field, Subfield, XMLWriter, parse_xml_to_array
 
-from google_books.utils import fh_date
+from google_books.utils import fh_date, shipment_date_obj
 
 
 def manipulate_records(source_fh: str) -> None:
@@ -133,25 +133,25 @@ def is_item_field(field: Field) -> bool:
             return False
 
 
-def create_stub_hathi_records(
-    marcxml_submitted: str, marcxml_errors: str, out: str
-) -> None:
+def create_stub_hathi_records(submitted_fh: Path, errors_fh: Path, out_fh: Path):
     """
     Creates stub records that include only LDR, 245, 856, & 907 fields.
     Generates 856 fields with HathiTrust URLs.
     Args:
-        marcxml_submitted:      path to MARCXML file submitted to HathiTrust
-        marcxml_errors:         path to Hathi's MARCXML with invalid records
-        out:                    path to MARC21 file with output stub records
+        submitted_fh:       `pathlib.Path` path of MARCXML file submitted to Hathi
+        error_fh:           `pathlib.Path` path of Zephir's error report in MARCXML
+                            format
+        out_fh:             `pathlib.Path` path of MARC21 output file
     """
-    if marcxml_errors == "clean":
-        invalid_bibs = []
+    if errors_fh.exists():
+        invalid_bibs = get_invalid_bib_nos(errors_fh)
+        print(f"Found {len(invalid_bibs)} rejected record(s) by Zephir.")
     else:
-        invalid_bibs = get_invalid_bib_nos(marcxml_errors)
-    print(f"Found {len(invalid_bibs)} rejected record(s) by Zephir.")
+        print(f"No Zephir error report was found in {errors_fh.parent}.")
+        invalid_bibs = []
     total_out_bibs = Counter()  # type: ignore
 
-    for bib in marcxml_reader(marcxml_submitted):
+    for bib in marcxml_reader(submitted_fh):
 
         bibno = bib.get("907").get("a")  # type: ignore
         if bibno not in invalid_bibs:
@@ -179,12 +179,12 @@ def create_stub_hathi_records(
             else:
                 # output bibs in MARC21 format
                 total_out_bibs.update(bibno=1)
-                append2marc(stub_bib, out)
+                append2marc(stub_bib, out_fh)
 
     print(f"Output {total_out_bibs.total()} stub records.")
 
 
-def get_invalid_bib_nos(marcxml_error: str) -> list[str]:
+def get_invalid_bib_nos(errors_fh: Path) -> list[str]:
     """
     Reads provided by Hathi MARCXML error report file and creates a list of Sierra
     bib #s.
@@ -193,7 +193,7 @@ def get_invalid_bib_nos(marcxml_error: str) -> list[str]:
     """
     try:
         bibNos = []
-        for bib in marcxml_reader(marcxml_error):
+        for bib in marcxml_reader(errors_fh):
             bibNos.append(bib.get("907").get("a"))  # type: ignore
         return bibNos
     except AttributeError:

@@ -1,3 +1,4 @@
+from pathlib import Path
 import pytest
 
 from pymarc import Record, Field, Subfield, MARCReader
@@ -14,10 +15,10 @@ from google_books.marc_manipulator import (
 
 
 def test_create_stub_hathi_records(tmp_path):
+    src = Path("tests/marcxml-sample.xml")
+    err = Path("tests/marcxml-sample-one-bib.xml")
     out = tmp_path / "out-test.mrc"
-    create_stub_hathi_records(
-        "tests/marcxml-sample.xml", "tests/marcxml-sample-one-bib.xml", out
-    )
+    create_stub_hathi_records(src, err, out)
 
     # one record will be skipped because it appears in the
     # marcxml file indicating rejected by Zephir bib
@@ -33,14 +34,17 @@ def test_create_stub_hathi_records(tmp_path):
             assert bib.get("907").get("a") == ".b122759692"
 
 
-def test_create_stub_hathi_records_no_barcode_warning():
+def test_create_stub_hathi_records_no_barcode_warning(tmp_path):
+    src = Path("tests/marcxml-sample-no-barcode.xml")
+    err = Path("tests/marcxml-sample-one-bib.xml")
+    out = tmp_path / "out-test.mrc"
     with pytest.warns(
         UserWarning, match="b122776470 has no barcode in 945 field. Skipping."
     ):
         create_stub_hathi_records(
-            "tests/marcxml-sample-no-barcode.xml",
-            "tests/marcxml-sample-one-bib.xml",
-            "",
+            src,
+            err,
+            out,
         )
 
 
