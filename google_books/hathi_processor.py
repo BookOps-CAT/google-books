@@ -4,7 +4,7 @@ import datetime
 from pathlib import Path
 
 from google_books.marc_manipulator import marcxml_reader, save2marcxml
-from google_books.utils import save2csv, fh_date, shipment_date_obj, timestamp_str2date
+from google_books.utils import save2csv, shipment_date_obj, timestamp_str2date
 
 from google_books.errors import GoogleBooksToolError
 
@@ -174,7 +174,8 @@ def get_marcxml(shipment_date: datetime.date) -> Path:
         f"files/shipments/{shipment_date:%Y-%m-%d}/NYPL_{shipment_date:%Y%m%d}.xml"
     )
     recap_path = Path(
-        f"files/shipments/{shipment_date:%Y-%m-%d}/NYPL_{shipment_date:%Y%m%d}-ReCAP.xml"
+        f"files/shipments/{shipment_date:%Y-%m-%d}/"
+        f"NYPL_{shipment_date:%Y%m%d}-ReCAP.xml"
     )
 
     if nyc_path.exists():
@@ -228,6 +229,7 @@ def clean_metadata_for_hathi_submission(shipment_date: str) -> None:
                 continue
 
     print(
-        f"Saving {len(bibs2keep)} items to {out}. Google rejected {rejected_count} item(s)."
+        f"Saving {len(bibs2keep)} items to {out}. "
+        f"Google rejected {rejected_count} item(s)."
     )
     save2marcxml(out, bibs2keep)
