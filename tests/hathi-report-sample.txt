@@ -1,0 +1,74 @@
+Foo, foo, foo
+
+The following configuration was used for this run:
+    foo
+    bar
+    spam
+    baz
+
+WARNING: using namespace nyp for NUC code in 852
+WARNING: -d nyp_20240816_google run option is not YYYYMMDD: using 20240816
+
+Highest CID used in database zephir_records table is 109999999
+Highest CID used in database htid_cid table is 109999999
+Highest CID from minter table is 109999999 (last updated 2025-01-07 14:30:12)
+Next CID minted as of the start of this program will be 109999995+1
+
+HTID-CID file will NOT be used to assign CIDS. If you want to use this file, use the -f option
+
+Processing messages:
+
+INFO: 1: new cid = 109999996
+INFO: 2: new cid = 109999997
+WARNING: .b152373081 (104): OCLC number found in unspecifed 035$(OcoLC) field: 13905277
+INFO: 3: new cid = 109999998
+WARNING: .b16006420x (190): no OCLC number in record
+ERROR 47: .b103615325 (912): invalid recTyp:  , leader = '01364s   a2200313 a 4500'
+WARNING: .b103615325 (912): no OCLC number in record
+INFO: 4: new cid = 109999999
+
+
+RUN REPORT
+
+4 records read
+3 records processed
+1 items skipped/error records written due to bib record error
+  invalid recTyp: 6
+3 warning messages due to bib record error
+  No OCLC number in record: 1
+  OCLC number found in unspecified 035$a: 1
+  Record has multiple 245s: 
+  Record with one OCLC matches more than one CID: 18
+2 records without OCLC number
+4 unique bib records found
+4 new bib records written
+4 hol/item records written
+   4 new hathi_ids output
+   1 updates to existing hathi ids output
+1 error records written
+0 warning records written
+0 ia_id/ark records written
+CIDs assigned by matching HTMM_CID table: 0
+     assigned by matching Zephir table: 0
+     assigned by matching OCLC number(s): 1056
+     assigned by matching campus local number: 138
+     assigned by matching campus previous local number: 0
+     assigned by matching internal OCLC number table: 203
+     assigned by matching internal local number table: 68
+     New CIDS assigned: 782
+     reassigned from CID because local number matched but other local number(s) used that CID: 0
+     reassigned from CID because previous local number matched but local number(s) used that CID: 0
+
+Highest CID assigned 109999999
+records read by format:
+  BK: 3
+  SE: 1
+  XX: 1
+records written by format:
+  BK: 3
+  MU: 2
+  SE: 1
+
+DASI counts: 20250107143034,NYP,google,nyp_20240816_google.marc,4,1
+
+prepare.pl ended Tue Jan  7 14:35:07 PST 2025 took 272.333024501801 seconds
