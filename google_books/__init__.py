@@ -29,12 +29,28 @@ def cli() -> None:
 
 @cli.command()
 @click.argument("shipment_date")
-def hathi_report(shipment_date: str) -> None:
+def hathi_report(shipment_date: str, parent_dir: str = "files/shipments") -> None:
     """
     Run analysis of the HathiTrust/Zephir reports and create actionable data.
     Outputs reports to files/out/ directory.
     """
-    parse_hathi_processing_report(shipment_date)
+    date = shipment_date_obj(shipment_date)
+    shipment_dir = Path(f"{parent_dir}/{date:%Y-%m-%d}")
+    source_fh = shipment_dir / f"nyp_{date:%Y%m%d}_google.txt"
+    success_fh = shipment_dir / f"hathi-{date:%Y%m%d}-success.csv"
+    invalid_oclc_fh = shipment_dir / f"hathi-{date:%Y%m%d}-unspecified-oclc.csv"
+    missing_oclc_fh = shipment_dir / f"hathi-{date:%Y%m%d}-missing-oclc.csv"
+    error_fh = shipment_dir / f"hathi-{date:%Y%m%d}-errors.csv"
+
+    suc, inv, mis, err = parse_hathi_processing_report(
+        date, source_fh, success_fh, invalid_oclc_fh, missing_oclc_fh, error_fh
+    )
+
+    click.echo("Report:")
+    click.echo(f"Successfully processed {suc}. See {success_fh}")
+    click.echo(f"OCLC in 035 only: {inv}. See {invalid_oclc_fh}")
+    click.echo(f"Missing OCLC #: {mis}. See {missing_oclc_fh}")
+    click.echo(f"Rejected {err}. See {error_fh}")
 
 
 @cli.command()

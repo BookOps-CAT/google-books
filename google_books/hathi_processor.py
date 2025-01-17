@@ -36,57 +36,62 @@ def find_err_msg(line: str) -> str:
         return ""
 
 
-def parse_hathi_processing_report(shipment_date: str) -> None:
+def parse_hathi_processing_report(
+    date: datetime.date,
+    source_fh: Path,
+    success_fh: Path,
+    invalid_oclc_fh: Path,
+    missing_oclc_fh: Path,
+    error_fh: Path,
+) -> tuple[int, int, int, int]:
     """
     Parses Hathi job report and filters the results into three separate
     files: hathi-success.csv, hathi-unspecified-oclc.csv, hathi-missing-oclc.csv.
 
     Args:
-        shipment_date:      shipment date in the YYYYMMDD format
-    """
-    date = shipment_date_obj(shipment_date)
-    succ_count = 0
-    succ_fh = f"files/shipments/{date:%Y-%m-%d}/hathi-{date:%Y%m%d}-success.csv"
-    inval_oclc_loc_count = 0
-    inval_oclc_fh = (
-        f"files/shipments/{date:%Y-%m-%d}/hathi-{date:%Y%m%d}-unspecified-oclc.csv"
-    )
-    miss_oclc_count = 0
-    miss_oclc_fh = (
-        f"files/shipments/{date:%Y-%m-%d}/hathi-{date:%Y%m%d}-missing-oclc.csv"
-    )
-    err_count = 0
-    err_fh = f"files/shipments/{date:%Y-%m-%d}/hathi-{date:%Y%m%d}-errors.csv"
+        date:               shipment date as `datetime.date` instance
+        source_fh:          path to MARCXML submitted to Hathi
+        success_fh:         path for success report
+        invalid_oclc_fh:    path for invalid location of OCLC # report
+        missing_oclc_fh:    path for missing OCLC # report
+        error_fh:           path for error report
 
-    source_fh = f"files/shipments/{date:%Y-%m-%d}/nyp_{date:%Y%m%d}_google.txt"
+    Returns:
+        report statistics as tuple: success, invalid OCLC location, missing OCLC #,
+        and errors
+    """
+    success_count = 0
+    invalid_oclc_loc_count = 0
+    missing_oclc_count = 0
+    error_count = 0
 
     with open(source_fh, "r") as file:
         for line in file.readlines():
             if "new cid =" in line:
                 cid = find_cid(line)
-                save2csv(succ_fh, ",", [cid])
-                succ_count += 1
+                save2csv(success_fh, ",", [cid])
+                success_count += 1
             elif line.startswith("WARNING: .b"):
                 bibno = find_bibno(line)
                 if "OCLC number found in unspecified 035$" in line:
                     save2csv(
-                        inval_oclc_fh,
+                        invalid_oclc_fh,
                         ",",
                         [bibno],
                     )
-                    inval_oclc_loc_count += 1
+                    invalid_oclc_loc_count += 1
                 elif "no OCLC number in record" in line:
                     save2csv(
-                        miss_oclc_fh,
+                        missing_oclc_fh,
                         ",",
                         [bibno],
                     )
-                    miss_oclc_count += 1
+                    missing_oclc_count += 1
             elif line.startswith("ERROR"):
                 bibno = find_bibno(line)
                 err_msg = find_err_msg(line)
                 save2csv(
-                    err_fh,
+                    error_fh,
                     ",",
                     [
                         bibno,
@@ -97,12 +102,8 @@ def parse_hathi_processing_report(shipment_date: str) -> None:
                         "NO",
                     ],
                 )
-                err_count += 1
-    print("Report:\t")
-    print(f"success: {succ_count} ({succ_fh})\n")
-    print(f"\tOCLC in 035 only: {inval_oclc_loc_count} ({inval_oclc_fh})\n")
-    print(f"\tmissing OCLC#: {miss_oclc_count} ({miss_oclc_fh})\n")
-    print(f"\trejected: {err_count} ({err_fh})")
+                error_count += 1
+    return (success_count, invalid_oclc_loc_count, missing_oclc_count, error_count)
 
 
 def get_checkin_range(values: set) -> tuple[datetime.date, datetime.date]:
