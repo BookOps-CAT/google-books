@@ -7,8 +7,8 @@ from google_books import cli
 def test_new_shipment(tmp_path):
     runner = CliRunner()
     with runner.isolated_filesystem(temp_dir=tmp_path) as td:
-        cwd = Path(td)
-        f = cwd / "files"
+        twd = Path(td)
+        f = twd / "files"
         f.mkdir()
         s = f / "shipments"
         s.mkdir()
