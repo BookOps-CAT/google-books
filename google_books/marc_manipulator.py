@@ -5,7 +5,7 @@ import warnings
 
 from pymarc import MARCReader, Record, Field, Subfield, XMLWriter, parse_xml_to_array
 
-from google_books.utils import fh_date, shipment_date_obj
+from google_books.utils import fh_date
 
 
 def manipulate_records(source_fh: str) -> None:
