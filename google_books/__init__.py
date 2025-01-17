@@ -29,7 +29,8 @@ def cli() -> None:
 
 @cli.command()
 @click.argument("shipment_date")
-def hathi_report(shipment_date: str, parent_dir: str = "files/shipments") -> None:
+@click.argument("parent_dir", type=click.Path(), default="files/shipments"))
+def hathi_report(shipment_date: str, parent_dir: str) -> None:
     """
     Run analysis of the HathiTrust/Zephir reports and create actionable data.
     Outputs reports to files/out/ directory.
