@@ -29,7 +29,7 @@ def cli() -> None:
 
 @cli.command()
 @click.argument("shipment_date")
-@click.argument("parent_dir", type=click.Path(), default="files/shipments"))
+@click.argument("parent_dir", type=click.Path(), default="files/shipments")
 def hathi_report(shipment_date: str, parent_dir: str) -> None:
     """
     Run analysis of the HathiTrust/Zephir reports and create actionable data.
@@ -58,8 +58,8 @@ def hathi_report(shipment_date: str, parent_dir: str) -> None:
 @click.argument("shipment_date")
 def hathi_metadata_prep(shipment_date: str):
     """
-    Preps HathiTrust MARCXML file using Google FO reconciliation report by removing from
-    it records/items that have not been digitized.
+    Preps HathiTrust MARCXML file using GRIN's Advanced Search report by
+    removing from it records/items that have not been digitized.
 
     Args:
         shipment_date:  date in the format YYYYMMDD
@@ -104,8 +104,15 @@ def recap_manifest(shipment_date: str) -> None:
     Args:
         shipment_date:  date in the format YYYYMMDD
     """
-    out = prep_recap_manifest_for_sierra_list(shipment_date)
-    click.echo(f"Cleaned up manifest was saved to {out.resolve()}")
+    try:
+        out = prep_recap_manifest_for_sierra_list(shipment_date)
+        click.echo(f"Cleaned up manifest was saved to {out.resolve()}")
+    except FileNotFoundError:
+        click.echo(
+            "Error. ReCAP manifest file not found. Make sure the shipment folder "
+            "exists and manifest txt file has correct name "
+            "(NYPL-YYYYMMDD-ReCAP.txt)."
+        )
 
 
 @cli.command()
