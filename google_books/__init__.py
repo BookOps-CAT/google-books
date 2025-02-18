@@ -64,7 +64,13 @@ def hathi_metadata_prep(shipment_date: str):
     Args:
         shipment_date:  date in the format YYYYMMDD
     """
-    clean_metadata_for_hathi_submission(shipment_date)
+    saved_bibs, rejected_bibs, file_size = clean_metadata_for_hathi_submission(
+        shipment_date
+    )
+    click.echo(
+        f"Scanned bibs: {saved_bibs}\nRejected bibs: {rejected_bibs}\n"
+        f"File size: {file_size}"
+    )
 
 
 @cli.command()

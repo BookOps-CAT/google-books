@@ -1,6 +1,7 @@
 from collections import Counter
 import csv
 import datetime
+import os
 from pathlib import Path
 
 from google_books.marc_manipulator import marcxml_reader, save2marcxml
@@ -200,13 +201,16 @@ def get_grin_report(shipment_date: datetime.date) -> Path:
     return Path(f"files/shipments/{shipment_date:%Y-%m-%d}/_query.txt")
 
 
-def clean_metadata_for_hathi_submission(shipment_date: str) -> None:
+def clean_metadata_for_hathi_submission(shipment_date: str) -> tuple[int, int, int]:
     """
     Using GRIN's not scanned report removes from a given metadata file records
     that include rejected for digitization items (barcodes).
 
     Args:
         shipment_date:      date in the format YYYYMMDD
+
+    Returns:
+        tuple with number of saved records, number of rejected records, and file size
     """
     date = shipment_date_obj(shipment_date)
     marcxml = get_marcxml(date)
@@ -229,8 +233,5 @@ def clean_metadata_for_hathi_submission(shipment_date: str) -> None:
             except AttributeError:
                 continue
 
-    print(
-        f"Saving {len(bibs2keep)} items to {out}. "
-        f"Google rejected {rejected_count} item(s)."
-    )
     save2marcxml(out, bibs2keep)
+    return (len(bibs2keep), rejected_count, os.path.getsize(out))
