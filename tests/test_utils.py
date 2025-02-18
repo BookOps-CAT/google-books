@@ -1,5 +1,7 @@
 from contextlib import nullcontext as does_not_raise
+import csv
 from datetime import date
+import warnings
 
 import pytest
 
@@ -7,10 +9,36 @@ import pytest
 from google_books.utils import (
     get_directory,
     fh_date,
+    save2csv,
     shipment_date_obj,
     timestamp_str2date,
 )
 from google_books.errors import FileNameError, GoogleBooksToolError
+
+
+def test_save2csv(tmp_path):
+    row = ["foo", "bar"]
+    fh = tmp_path / "save2cvs-test.csv"
+    with does_not_raise():
+        save2csv(fh, delimiter=",", row=row)
+    assert fh.exists()
+    with open(fh, "r", encoding="utf-8") as f:
+        reader = csv.reader(f)
+        rows = []
+        for row in reader:
+            rows.append(row)
+    assert len(rows) == 1
+    assert rows[0] == ["foo", "bar"]
+
+
+def test_save2csv_unicode_encode_error(tmp_path):
+    row = ["foo", "\ud83d\udca9"]
+    fh = tmp_path / "save2csv-test.csv"
+
+    with pytest.warns(UserWarning) as wrn:
+        save2csv(fh, ",", row)
+
+    assert wrn[0].message.args[0] == f"Could not write `foo` to {fh}"
 
 
 @pytest.mark.parametrize(
