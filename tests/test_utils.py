@@ -1,7 +1,6 @@
 from contextlib import nullcontext as does_not_raise
 import csv
 from datetime import date
-import warnings
 
 import pytest
 
