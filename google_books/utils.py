@@ -27,7 +27,7 @@ def save2csv(dst_fh, delimiter, row):
         try:
             out.writerow(row)
         except UnicodeEncodeError:
-            warnings.warn(f"Could not write {row[0]} to {dst_fh}")
+            warnings.warn(f"Could not write `{row[0]}` to {dst_fh}")
 
 
 def get_directory(dir_parent: Union[str, Path], dir_name: str) -> Path:
