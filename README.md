@@ -23,6 +23,9 @@ Use the help function to learn about all available options:
 $ google-books --help
 ```
 
+See a detailed walkthrough that includes instruction how to use the google-books tool in [this Google doc](https://docs.google.com/document/d/1xMqv9PjpOiJGxNZ0HsKS6ZXOykubqQPYoiqDSgJ3ivs/edit?usp=sharing).
+
+#### 
 #### Prep Onsite Manifest for Google Submission
 #### Prep ReCAP Manifest for Google Submission
 #### Parse HathiTrust Processing Report
@@ -62,20 +65,7 @@ https://babel.hathitrust.org/cgi/pt?id=nyp.33433105117174
 http://books.google.com/books?vid=NYPL:[Barcode]
 
 
-### Questions
-+ When ingested records show up in HathiTrust?
-+ ~~Should the MARCXML file send to Google/Hathi be deduped? Is this a problem for either one? Duplication stems from type of Sierra list being used = item record search.~~
-  + It appears duplication is fine - Hathi includes item record data and that can be parsed from dup bibs, each with different item (945 tag)
-+ What happens when we resubmit a record that passed validation (minor problems only) and was ingested to Hathi? Will it get overwritten?
-+ ~~Does warning like that from Hathi indicates the metadata was not ingested? WARNING: .b13299222x (93): OCLC number found in unspecified 035$(OcoLC) field: 64405402~~
-  + Confirmed, these are not being ingested and must be corrected - OCLC info provided in 001/003/035
-+ ~~For Hathi, does it matter if OCLC # is in the first 035?~~
-  + It appears it does not matter
-+ Zephir gives the following submission warning: WARNING: -d nyp_20231208_google run option is not YYYYMMDD: using 20231208 . Is this relevant? Submissions are getting processed and we follow the file name convention specified in the docs.
-+ Zephir gives the following submission warning: WARNING: using namespace nyp for NUC code in 852. What is this about?
-
 ### To-do
-+ redo logic for exclusion of bibs from Hathi submissions based on Google FO reconciliation reports, use instead data from GRIN
 + verify 856's HathiTrust links were added to correct bibs from Nov 23
 + add notes about material's poor condition to items in Sierra based on GRIN's rejections (condition 25)
 + add more tests & increase test coverage
