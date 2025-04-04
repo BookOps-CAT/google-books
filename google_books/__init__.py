@@ -68,7 +68,7 @@ def hathi_metadata_prep(shipment_date: str):
         shipment_date
     )
     click.echo(
-        f"Scanned bibs: {saved_bibs}\nRejected bibs: {rejected_bibs}\n"
+        f"Scanned items: {saved_bibs}\nRejected items: {rejected_bibs}\n"
         f"File size: {file_size} (bytes)"
     )
 
