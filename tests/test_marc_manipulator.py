@@ -29,7 +29,7 @@ def test_create_stub_hathi_records(tmp_path):
             assert bib_tags == ["245", "856", "907"]
             assert (
                 str(bib.get("856"))
-                == "=856  41$uhttp://hdl.handle.net/2027/nyp.33433010140428$zFull text available via HathiTrust"  # noqa:E501
+                == "=856  41$uhttp://hdl.handle.net/2027/nyp.33433010140428$zContent available via HathiTrust"  # noqa:E501
             )
             assert bib.get("907").get("a") == ".b122759692"
 
@@ -147,17 +147,17 @@ def test_fix_oclc_info_success(stub_bib):
         (
             "33433035453483",
             None,
-            "33433035453483$zFull text available via HathiTrust",
+            "33433035453483$zContent available via HathiTrust",
         ),
         (
             "33433035453483",
             " ",
-            "33433035453483$zFull text available via HathiTrust",
+            "33433035453483$zContent available via HathiTrust",
         ),
         (
             "33433035453483",
             " vol. 1 ",
-            "33433035453483$zFull text available via HathiTrust--vol. 1",
+            "33433035453483$zContent available via HathiTrust--vol. 1",
         ),
     ],
 )

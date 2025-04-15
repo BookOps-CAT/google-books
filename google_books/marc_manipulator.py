@@ -110,9 +110,9 @@ def generate_hathi_url(
         return None
 
     if volume:
-        subfields.append(Subfield("z", f"Full text available via HathiTrust--{volume}"))
+        subfields.append(Subfield("z", f"Content available via HathiTrust--{volume}"))
     else:
-        subfields.append(Subfield("z", "Full text available via HathiTrust"))
+        subfields.append(Subfield("z", "Content available via HathiTrust"))
 
     return Field(tag="856", indicators=["4", "1"], subfields=subfields)
 
