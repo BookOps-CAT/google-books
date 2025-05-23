@@ -25,9 +25,26 @@ $ google-books --help
 
 See a detailed walkthrough that includes instruction how to use the google-books tool in [this Google doc](https://docs.google.com/document/d/1xMqv9PjpOiJGxNZ0HsKS6ZXOykubqQPYoiqDSgJ3ivs/edit?usp=sharing).
 
-#### 
+#### Create New Shipment Folder
+To store all associated files for a particular shipment, create a folder in `files/shipments/` using the following command:
+```bash
+$ google-books new-shipment [YYYYMMDD]
+```
 #### Prep Onsite Manifest for Google Submission
-#### Prep ReCAP Manifest for Google Submission
+A Sierra export that includes Google patron account numbers and barcodes must be cleaned up before submitting it to Google. Use the following command where YYYYMMDD is the date of the shipment and folder:
+```bash
+$ google-books onsite-manifest [YYYYMMMDD]
+```
+This command produces `NYPL_YYYYMMDD.txt` manifest file.
+
+#### Prep ReCAP Manifest for Sierra List Creation
+ReCAP staff uploads a manifest to Google Drive. Use it to select relevant barcodes and create based on them a list in Sierra that is required to prepare metadata MARCXML file.
+Use the following command to extract barcodes for the Create List:
+```bash
+$ google-books recap-manifest
+```
+The command creates `google-recap-barcodes-YYYYMMDD.csv` in the shipment folder. This list is used in the Data Exchange module.
+
 #### Parse HathiTrust Processing Report
 
 ```bash
