@@ -10,6 +10,53 @@ from google_books.utils import save2csv, shipment_date_obj, timestamp_str2date
 from google_books.errors import GoogleBooksToolError
 
 
+def available_for_download(row: list[str]) -> bool:
+    """
+    Checks if the item is marked as NOT_AVAILABLE_FOR_DOWNLOAD in the GRIN report.
+    These items are scannable (value true), but there  was opt-out post-scan.
+    """
+    if "NOT_AVAILABLE_FOR_DOWNLOAD" in row[2]:
+        return False
+    else:
+        return True
+
+
+def clean_metadata_for_hathi_submission(shipment_date: str) -> tuple[int, int, int]:
+    """
+    Using GRIN's not scanned report removes from a given metadata file records
+    that include rejected for digitization items (barcodes).
+
+    Args:
+        shipment_date:      date in the format YYYYMMDD
+
+    Returns:
+        tuple with number of saved records, number of rejected records, and file size
+    """
+    date = shipment_date_obj(shipment_date)
+    marcxml = get_marcxml(date)
+    grin_report = get_grin_report(date)
+    out = get_hathi_meta_destination(date)
+
+    rejected_barcodes = google_reconciliation_to_barcodes_lst(grin_report)
+    rejected_count = 0
+    bibs = marcxml_reader(str(marcxml))
+
+    bibs2keep = []
+    for bib in bibs:
+        for field in bib.get_fields("945"):
+            try:
+                barcode = field.get("i").strip()
+                if barcode not in rejected_barcodes:
+                    bibs2keep.append(bib)
+                else:
+                    rejected_count += 1
+            except AttributeError:
+                continue
+
+    save2marcxml(out, bibs2keep)
+    return (len(bibs2keep), rejected_count, os.path.getsize(out))
+
+
 def find_bibno(line: str) -> str:
     """Extracts Sierra bib # from the report"""
     bibno_idx = line.find(".b")
@@ -35,6 +82,101 @@ def find_err_msg(line: str) -> str:
         return line[err_idx + 3 :].strip()  # noqa: E203
     else:
         return ""
+
+
+def get_checkin_range(values: set) -> tuple[datetime.date, datetime.date]:
+    """
+    Determines check-in date range in exported GRIN report.
+
+    Args:
+        values:         set of strings
+    """
+    return (min(values), max(values))
+
+
+def google_reconciliation_to_barcodes_lst(fh: Path) -> list[str]:
+    """
+    Parses GRIN report of not scanned by Google items and returns a list.
+    The list is deduped.
+
+    Args:
+        fh:             path to google reconciliation report
+
+    Returns:
+        A list of rejected barcodes
+    """
+    barcodes = set()
+    grin_codes = []
+    checkin_dates = set()
+    with fh.open() as report:
+        reader = csv.reader(report, delimiter="\t")
+        next(reader)
+        for row in reader:
+            if not available_for_download(row) or not scannable(row):
+                barcodes.add(row[0].strip())
+            grin_codes.append((row[4]))
+            checkin_dates.add(timestamp_str2date(row[1]))
+
+    c = Counter(grin_codes)
+    checkin_start, checkin_end = get_checkin_range(checkin_dates)
+    print(
+        f"Most common scanning problems during period from {checkin_start} to "
+        f"{checkin_end} (total not scanned={len(barcodes)}):"
+    )
+    for v, n in c.most_common():
+        print(f"{v} = {n}")
+    return sorted(list(barcodes))
+
+
+def get_hathi_meta_destination(shipment_date: datetime.date) -> Path:
+    """
+    Creates path to output file for HathiTrust metadata.
+
+    Args:
+        shipment_date:      date string (YYYYMMDD format) which corresponds to
+                            files/shipments/YYYY-MM-DD directory
+    """
+    return Path(
+        f"files/shipments/{shipment_date:%Y-%m-%d}/"
+        f"nyp_{shipment_date:%Y%m%d}_google.xml"
+    )
+
+
+def get_marcxml(shipment_date: datetime.date) -> Path:
+    """
+    Returns path to source MARCXML file to be used for submission to Hathi.
+
+    Args:
+        shipment_date:      date string (YYYYMMDD format) which corresponds to
+                            files/shipments/YYYY-MM-DD directory
+    """
+    nyc_path = Path(
+        f"files/shipments/{shipment_date:%Y-%m-%d}/NYPL_{shipment_date:%Y%m%d}.xml"
+    )
+    recap_path = Path(
+        f"files/shipments/{shipment_date:%Y-%m-%d}/"
+        f"NYPL_{shipment_date:%Y%m%d}-ReCAP.xml"
+    )
+
+    if nyc_path.exists():
+        return nyc_path
+    elif recap_path.exists():
+        return recap_path
+    else:
+        raise GoogleBooksToolError(
+            "Error. No MARCXML file was found in given directory."
+        )
+
+
+def get_grin_report(shipment_date: datetime.date) -> Path:
+    """
+    Determines path to the grin report.
+
+    Args:
+        shipment_date:      which corresponds to
+                            files/shipments/YYYY-MM-DD directory
+    """
+    return Path(f"files/shipments/{shipment_date:%Y-%m-%d}/_query.txt")
 
 
 def parse_hathi_processing_report(
@@ -107,131 +249,10 @@ def parse_hathi_processing_report(
     return (success_count, invalid_oclc_loc_count, missing_oclc_count, error_count)
 
 
-def get_checkin_range(values: set) -> tuple[datetime.date, datetime.date]:
+def scannable(row: list[str]) -> bool:
     """
-    Determines check-in date range in exported GRIN report.
-
-    Args:
-        values:         set of strings
-    """
-    return (min(values), max(values))
-
-
-def google_reconciliation_to_barcodes_lst(fh: Path) -> list[str]:
-    """
-    Parses GRIN report of not scanned by Google items and returns a list.
-    The list is deduped.
-
-    Args:
-        fh:             path to google reconciliation report
-
-    Returns:
-        A list of rejected barcodes
-    """
-    barcodes = set()
-    grin_codes = []
-    checkin_dates = set()
-    with fh.open() as report:
-        reader = csv.reader(report, delimiter="\t")
-        next(reader)
-        for row in reader:
-            barcodes.add(row[0].strip())
-            grin_codes.append((row[4]))
-            checkin_dates.add(timestamp_str2date(row[1]))
-
-    c = Counter(grin_codes)
-    checkin_start, checkin_end = get_checkin_range(checkin_dates)
-    print(
-        f"Most common scanning problems during period from {checkin_start} to "
-        f"{checkin_end} (total not scanned={c.total()}):"
-    )
-    for v, n in c.most_common():
-        print(f"{v} = {n}")
-    return sorted(list(barcodes))
-
-
-def get_hathi_meta_destination(shipment_date: datetime.date) -> Path:
-    """
-    Creates path to output file for HathiTrust metadata.
-
-    Args:
-        shipment_date:      date string (YYYYMMDD format) which corresponds to
-                            files/shipments/YYYY-MM-DD directory
-    """
-    return Path(
-        f"files/shipments/{shipment_date:%Y-%m-%d}/"
-        f"nyp_{shipment_date:%Y%m%d}_google.xml"
-    )
-
-
-def get_marcxml(shipment_date: datetime.date) -> Path:
-    """
-    Returns path to source MARCXML file to be used for submission to Hathi.
-
-    Args:
-        shipment_date:      date string (YYYYMMDD format) which corresponds to
-                            files/shipments/YYYY-MM-DD directory
-    """
-    nyc_path = Path(
-        f"files/shipments/{shipment_date:%Y-%m-%d}/NYPL_{shipment_date:%Y%m%d}.xml"
-    )
-    recap_path = Path(
-        f"files/shipments/{shipment_date:%Y-%m-%d}/"
-        f"NYPL_{shipment_date:%Y%m%d}-ReCAP.xml"
-    )
-
-    if nyc_path.exists():
-        return nyc_path
-    elif recap_path.exists():
-        return recap_path
+    Checks the value of the "Scannable" column in the GRIN report."""
+    if "true" in row[5]:
+        return True
     else:
-        raise GoogleBooksToolError(
-            "Error. No MARCXML file was found in given directory."
-        )
-
-
-def get_grin_report(shipment_date: datetime.date) -> Path:
-    """
-    Determines path to the grin report.
-
-    Args:
-        shipment_date:      which corresponds to
-                            files/shipments/YYYY-MM-DD directory
-    """
-    return Path(f"files/shipments/{shipment_date:%Y-%m-%d}/_query.txt")
-
-
-def clean_metadata_for_hathi_submission(shipment_date: str) -> tuple[int, int, int]:
-    """
-    Using GRIN's not scanned report removes from a given metadata file records
-    that include rejected for digitization items (barcodes).
-
-    Args:
-        shipment_date:      date in the format YYYYMMDD
-
-    Returns:
-        tuple with number of saved records, number of rejected records, and file size
-    """
-    date = shipment_date_obj(shipment_date)
-    marcxml = get_marcxml(date)
-    grin_report = get_grin_report(date)
-    out = get_hathi_meta_destination(date)
-
-    rejected_barcodes = google_reconciliation_to_barcodes_lst(grin_report)
-    rejected_count = 0
-    bibs = marcxml_reader(str(marcxml))
-
-    bibs2keep = []
-    for bib in bibs:
-        for field in bib.get_fields("945"):
-            try:
-                barcode = field.get("i").strip()
-                if barcode not in rejected_barcodes:
-                    bibs2keep.append(bib)
-                else:
-                    rejected_count += 1
-            except AttributeError:
-                continue
-
-    save2marcxml(out, bibs2keep)
-    return (len(bibs2keep), rejected_count, os.path.getsize(out))
+        return False

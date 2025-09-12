@@ -10,6 +10,8 @@ from google_books.hathi_processor import (
     get_hathi_meta_destination,
     get_checkin_range,
     google_reconciliation_to_barcodes_lst,
+    available_for_download,
+    scannable,
 )
 
 
@@ -66,7 +68,7 @@ def test_get_checkin_range():
 def test_google_reconciliation_to_barcodes_lst():
     sample_report = Path("tests/_grin_query_sample.txt")
     assert google_reconciliation_to_barcodes_lst(sample_report) == sorted(
-        ["33433124886338", "33433119947368", "33433116658661"]
+        ["33433124886338", "33433119947368", "33433116658661", "33433090371893"]
     )
 
 
@@ -75,3 +77,25 @@ def test_get_hathi_meta_destination():
     assert get_hathi_meta_destination(ship_date) == Path(
         "files/shipments/2024-12-31/nyp_20241231_google.xml"
     )
+
+
+@pytest.mark.parametrize(
+    "arg,expectation",
+    [
+        ([0, 1, "NOT_AVAILABLE_FOR_DOWNLOAD", 3, 4, 5], False),
+        ([0, 1, "CHECKED_IN", 3, 4, 5], True),
+    ],
+)
+def test_available_for_download(arg, expectation):
+    assert available_for_download(arg) == expectation
+
+
+@pytest.mark.parametrize(
+    "arg,expectation",
+    [
+        ([0, 1, 2, 3, 4, "false"], False),
+        ([0, 1, 2, 3, 4, "true"], True),
+    ],
+)
+def test_scannable(arg, expectation):
+    assert scannable(arg) == expectation

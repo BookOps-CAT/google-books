@@ -1,4 +1,6 @@
 Barcode	Check-In Date	State	Viewability	Conditions	Scannable	Opted-Out (post-scan)	Tagging	Audit	Material Error%	Overall Error%	Scanned Date	Processed Date	Analyzed Date	Converted Date	Allow Download Updated Date	Viewability Updated Date	Source Library Bibkey	Rubbish	Downloaded Date	Claimed	OCR GTD Score	OCR Analysis Score	Digitization Method	OCR'd Date
+33433068151426	2025/06/02 00:42	CHECKED_IN	-		true	false	false		0%	0%										false				
 33433124886338	2024/09/04 23:08	CHECKED_IN	-	25	false	false	false		0%	0%										false				
 33433119947368	2024/10/17 01:31	CHECKED_IN	-	25	false	false	false		0%	0%										false				
 33433116658661	2024/12/22 22:17	CHECKED_IN	-	25	false	false	false		0%	0%										false				
+33433090371893	2025/06/09 00:55	NOT_AVAILABLE_FOR_DOWNLOAD	VIEW_METADATA	21	true	true	false		0%	0%			2025/09/05 07:55							false	98	0	NON_DESTRUCTIVE	
