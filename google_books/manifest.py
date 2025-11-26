@@ -48,7 +48,7 @@ def prep_recap_manifest_for_sierra_list(shipment_date: str) -> Path:
     """
     date = shipment_date_obj(shipment_date)
     shipment_directory = get_directory("files/shipments", f"{date:%Y-%m-%d}")
-    source_fh = Path(shipment_directory).joinpath(f"NYPL_{date:%Y%m%d}-ReCAP.txt")
+    source_fh = Path(shipment_directory).joinpath(f"NYPL_{date:%Y%m%d}ReCAP.txt")
     out_path = Path(shipment_directory).joinpath(
         f"google-recap-barcodes-{date:%Y%m%d}.csv"
     )

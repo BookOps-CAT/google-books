@@ -155,7 +155,7 @@ def get_marcxml(shipment_date: datetime.date) -> Path:
     )
     recap_path = Path(
         f"files/shipments/{shipment_date:%Y-%m-%d}/"
-        f"NYPL_{shipment_date:%Y%m%d}-ReCAP.xml"
+        f"NYPL_{shipment_date:%Y%m%d}ReCAP.xml"
     )
 
     if nyc_path.exists():

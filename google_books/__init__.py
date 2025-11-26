@@ -117,7 +117,7 @@ def recap_manifest(shipment_date: str) -> None:
         click.echo(
             "Error. ReCAP manifest file not found. Make sure the shipment folder "
             "exists and manifest txt file has correct name "
-            "(NYPL_YYYYMMDD-ReCAP.txt)."
+            "(NYPL_YYYYMMDDReCAP.txt)."
         )
 
 
