@@ -21,7 +21,7 @@ def prep_onsite_manifest_for_google(shipment_date: str) -> Path:
         shipment_date:  YYYYMMDD of the shipment
     """
     date = shipment_date_obj(shipment_date)
-    shipment_directory = get_directory("files/shipments", f"{date:%Y-%m-%d}")
+    shipment_directory = get_directory("files/shipments", f"{date:%Y-%m-%d}_onsite")
     source_path = shipment_directory / f"SierraExportManifest_{date:%Y%m%d.txt}"
     out_path = shipment_directory / f"NYPL_{date:%Y%m%d}.txt"
 
@@ -47,7 +47,7 @@ def prep_recap_manifest_for_sierra_list(shipment_date: str) -> Path:
         `Path` instance to output file
     """
     date = shipment_date_obj(shipment_date)
-    shipment_directory = get_directory("files/shipments", f"{date:%Y-%m-%d}")
+    shipment_directory = get_directory("files/shipments", f"{date:%Y-%m-%d}_recap")
     source_fh = Path(shipment_directory).joinpath(f"NYPL_{date:%Y%m%d}ReCAP.txt")
     out_path = Path(shipment_directory).joinpath(
         f"google-recap-barcodes-{date:%Y%m%d}.csv"

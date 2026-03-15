@@ -21,21 +21,24 @@ def available_for_download(row: list[str]) -> bool:
         return True
 
 
-def clean_metadata_for_hathi_submission(shipment_date: str) -> tuple[int, int, int]:
+def clean_metadata_for_hathi_submission(
+    shipment_date: str, mat_source: str
+) -> tuple[int, int, int]:
     """
     Using GRIN's not scanned report removes from a given metadata file records
     that include rejected for digitization items (barcodes).
 
     Args:
         shipment_date:      date in the format YYYYMMDD
+        mat_source:         source of the material (e.g. onsite, recap)
 
     Returns:
         tuple with number of saved records, number of rejected records, and file size
     """
     date = shipment_date_obj(shipment_date)
-    marcxml = get_marcxml(date)
-    grin_report = get_grin_report(date)
-    out = get_hathi_meta_destination(date)
+    marcxml = get_marcxml(date, mat_source)
+    grin_report = get_grin_report(date, mat_source)
+    out = get_hathi_meta_destination(date, mat_source)
 
     rejected_barcodes = google_reconciliation_to_barcodes_lst(grin_report)
     rejected_count = 0
@@ -128,55 +131,53 @@ def google_reconciliation_to_barcodes_lst(fh: Path) -> list[str]:
     return sorted(list(barcodes))
 
 
-def get_hathi_meta_destination(shipment_date: datetime.date) -> Path:
+def get_hathi_meta_destination(shipment_date: datetime.date, mat_source: str) -> Path:
     """
     Creates path to output file for HathiTrust metadata.
 
     Args:
         shipment_date:      date string (YYYYMMDD format) which corresponds to
                             files/shipments/YYYY-MM-DD directory
+        mat_source:         source of the material (e.g. onsite, recap)
     """
     return Path(
-        f"files/shipments/{shipment_date:%Y-%m-%d}/"
+        f"files/shipments/{shipment_date:%Y-%m-%d}_{mat_source}/"
         f"nyp_{shipment_date:%Y%m%d}_google.xml"
     )
 
 
-def get_marcxml(shipment_date: datetime.date) -> Path:
+def get_marcxml(shipment_date: datetime.date, mat_source: str) -> Path:
     """
     Returns path to source MARCXML file to be used for submission to Hathi.
 
     Args:
         shipment_date:      date string (YYYYMMDD format) which corresponds to
                             files/shipments/YYYY-MM-DD directory
+        mat_source:         source of the material (e.g. onsite, recap)
     """
-    nyc_path = Path(
-        f"files/shipments/{shipment_date:%Y-%m-%d}/NYPL_{shipment_date:%Y%m%d}.xml"
-    )
-    recap_path = Path(
-        f"files/shipments/{shipment_date:%Y-%m-%d}/"
-        f"NYPL_{shipment_date:%Y%m%d}ReCAP.xml"
+    marcxml_path = Path(
+        f"files/shipments/{shipment_date:%Y-%m-%d}_{mat_source}/"
+        f"NYPL_{shipment_date:%Y%m%d}.xml"
     )
 
-    if nyc_path.exists():
-        return nyc_path
-    elif recap_path.exists():
-        return recap_path
+    if marcxml_path.exists():
+        return marcxml_path
     else:
         raise GoogleBooksToolError(
             "Error. No MARCXML file was found in given directory."
         )
 
 
-def get_grin_report(shipment_date: datetime.date) -> Path:
+def get_grin_report(shipment_date: datetime.date, mat_source: str) -> Path:
     """
     Determines path to the grin report.
 
     Args:
         shipment_date:      which corresponds to
                             files/shipments/YYYY-MM-DD directory
+        mat_source:         source of the material (e.g. onsite, recap)
     """
-    return Path(f"files/shipments/{shipment_date:%Y-%m-%d}/_query.txt")
+    return Path(f"files/shipments/{shipment_date:%Y-%m-%d}_{mat_source}/_query.txt")
 
 
 def parse_hathi_processing_report(

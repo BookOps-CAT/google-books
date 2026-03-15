@@ -29,14 +29,15 @@ def cli() -> None:
 
 @cli.command()
 @click.argument("shipment_date")
+@click.argument("mat_source")
 @click.argument("parent_dir", type=click.Path(), default="files/shipments")
-def hathi_report(shipment_date: str, parent_dir: str) -> None:
+def hathi_report(shipment_date: str, mat_source: str, parent_dir: str) -> None:
     """
     Run analysis of the HathiTrust/Zephir reports and create actionable data.
     Outputs reports to files/out/ directory.
     """
     date = shipment_date_obj(shipment_date)
-    shipment_dir = Path(f"{parent_dir}/{date:%Y-%m-%d}")
+    shipment_dir = Path(f"{parent_dir}/{date:%Y-%m-%d}_{mat_source}")
     source_fh = shipment_dir / f"nyp_{date:%Y%m%d}_google.txt"
     success_fh = shipment_dir / f"hathi-{date:%Y%m%d}-success.csv"
     invalid_oclc_fh = shipment_dir / f"hathi-{date:%Y%m%d}-unspecified-oclc.csv"
@@ -56,7 +57,8 @@ def hathi_report(shipment_date: str, parent_dir: str) -> None:
 
 @cli.command()
 @click.argument("shipment_date")
-def hathi_metadata_prep(shipment_date: str):
+@click.argument("mat_source")
+def hathi_metadata_prep(shipment_date: str, mat_source: str) -> None:
     """
     Preps HathiTrust MARCXML file using GRIN's Advanced Search report by
     removing from it records/items that have not been digitized.
@@ -65,7 +67,7 @@ def hathi_metadata_prep(shipment_date: str):
         shipment_date:  date in the format YYYYMMDD
     """
     saved_bibs, rejected_bibs, file_size = clean_metadata_for_hathi_submission(
-        shipment_date
+        shipment_date, mat_source
     )
     click.echo(
         f"Scanned items: {saved_bibs}\nRejected items: {rejected_bibs}\n"
@@ -75,19 +77,30 @@ def hathi_metadata_prep(shipment_date: str):
 
 @cli.command()
 @click.argument("shipment_date")
+@click.argument("mat_source")
 @click.argument("parent_dir", type=click.Path(), default="files/shipments")
-def new_shipment(shipment_date: str, parent_dir: str):
+def new_shipment(shipment_date: str, mat_source: str, parent_dir: str):
     """
     Creates a new folder for shipment files.
 
     Args:
         shipment_date:  date in the format YYYYMMDD
+        mat_source:      source of the material (e.g. onsite, recap)
+        parent_dir:      parent directory for the shipment folder; default is `files/shipments`
     """
 
     date = shipment_date_obj(shipment_date)
-    folder = f"{date:%Y-%m-%d}"
-    shipment_directory = get_directory(parent_dir, folder)
-    click.echo(f"New shipment directory created at {shipment_directory}")
+
+    if mat_source not in ["onsite", "recap"]:
+        click.echo("Invalid material source argument. Please use 'onsite' or 'recap'.")
+    else:
+        if mat_source == "onsite":
+            folder = f"{date:%Y-%m-%d}_onsite"
+        elif mat_source == "recap":
+            folder = f"{date:%Y-%m-%d}_recap"
+
+        shipment_directory = get_directory(parent_dir, folder)
+        click.echo(f"New shipment directory created at {shipment_directory}")
 
 
 @cli.command()
