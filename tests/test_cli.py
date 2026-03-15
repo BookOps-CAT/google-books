@@ -4,7 +4,6 @@ from click.testing import CliRunner
 import pytest
 
 from google_books import cli
-from google_books.errors import FileNameError
 
 
 @pytest.mark.parametrize(
