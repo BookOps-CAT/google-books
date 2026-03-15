@@ -85,8 +85,9 @@ def new_shipment(shipment_date: str, mat_source: str, parent_dir: str):
 
     Args:
         shipment_date:  date in the format YYYYMMDD
-        mat_source:      source of the material (e.g. onsite, recap)
-        parent_dir:      parent directory for the shipment folder; default is `files/shipments`
+        mat_source:     source of the material (e.g. onsite, recap)
+        parent_dir:     parent directory for the shipment folder; default is
+                        `files/shipments`
     """
 
     date = shipment_date_obj(shipment_date)
