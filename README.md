@@ -28,7 +28,11 @@ See a detailed walkthrough that includes instruction how to use the google-books
 #### Create New Shipment Folder
 To store all associated files for a particular shipment, create a folder in `files/shipments/` using the following command:
 ```bash
-$ google-books new-shipment [YYYYMMDD]
+$ google-books new-shipment [YYYYMMDD] onsite
+```
+or 
+```bash
+$ google-books new-shipment [YYYYMMDD] recap
 ```
 #### Prep Onsite Manifest for Google Submission
 A Sierra export that includes Google patron account numbers and barcodes must be cleaned up before submitting it to Google. Use the following command where YYYYMMDD is the date of the shipment and folder:
@@ -48,14 +52,14 @@ The command creates `google-recap-barcodes-YYYYMMDD.csv` in the shipment folder.
 #### Parse HathiTrust Processing Report
 
 ```bash
-$ google-books hathi-report [FILE PATH]
+$ google-books hathi-report [SHIPMENT DATE, YYYYMMDD] [MAT. SOURCE]
 ```
 
 #### Prepping MARCXML for HathiTrust Submission
-Received Google's reconciliation report can be used to remove from MARCXML file, intended for HathiTrust, any records for materials that have not been scanned. Expect to receive a such reconciliation report via email about 2 months after shipment to Google. Only then remove records for any not digitized items and submit processed MARCXML file to Zephir.
+Download GRIN's report for relevant period of time to get information about any rejected items. Indicate material source as "onsite" or "recap"
 
 ```bash
-$ google-books hathi-metadata-prep [MARCXML IN PATH] [GOOGLE FO REPORT PATH] [MARCXML OUT PATH]
+$ google-books hathi-metadata-prep [SHIPMENT DATE, YYYYMMDD] [MAT. SOURCE]
 ```
 
 #### Move OCLC Identifiers to the Control Field
