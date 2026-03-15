@@ -37,7 +37,7 @@ def test_new_shipment_invalid_mat_source(tmp_path):
         assert result.exit_code == 0
         assert (
             result.output
-            == f"Invalid material source argument. Please use 'onsite' or 'recap'.\n"
+            == "Invalid material source argument. Please use 'onsite' or 'recap'.\n"
         )
 
         # verify that no new directory was created
