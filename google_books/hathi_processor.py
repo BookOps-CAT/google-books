@@ -155,13 +155,19 @@ def get_marcxml(shipment_date: datetime.date, mat_source: str) -> Path:
                             files/shipments/YYYY-MM-DD directory
         mat_source:         source of the material (e.g. onsite, recap)
     """
-    marcxml_path = Path(
+    marcxml_onsite_path = Path(
         f"files/shipments/{shipment_date:%Y-%m-%d}_{mat_source}/"
         f"NYPL_{shipment_date:%Y%m%d}.xml"
     )
+    marcxml_recap_path = Path(
+        f"files/shipments/{shipment_date:%Y-%m-%d}_{mat_source}/"
+        f"NYPL_{shipment_date:%Y%m%d}ReCAP.xml"
+    )
 
-    if marcxml_path.exists():
-        return marcxml_path
+    if marcxml_onsite_path.exists():
+        return marcxml_onsite_path
+    elif marcxml_recap_path.exists():
+        return marcxml_recap_path
     else:
         raise GoogleBooksToolError(
             "Error. No MARCXML file was found in given directory."
