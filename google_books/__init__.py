@@ -38,14 +38,20 @@ def hathi_report(shipment_date: str, mat_source: str, parent_dir: str) -> None:
     """
     date = shipment_date_obj(shipment_date)
     shipment_dir = Path(f"{parent_dir}/{date:%Y-%m-%d}_{mat_source}")
-    source_fh = shipment_dir / f"nyp_{date:%Y%m%d}_google.txt"
+    source_fh = shipment_dir / f"nyp_{date:%Y%m%d}_google_{mat_source}.txt"
     success_fh = shipment_dir / f"hathi-{date:%Y%m%d}-success.csv"
     invalid_oclc_fh = shipment_dir / f"hathi-{date:%Y%m%d}-unspecified-oclc.csv"
     missing_oclc_fh = shipment_dir / f"hathi-{date:%Y%m%d}-missing-oclc.csv"
     error_fh = shipment_dir / f"hathi-{date:%Y%m%d}-errors.csv"
 
     suc, inv, mis, err = parse_hathi_processing_report(
-        date, source_fh, success_fh, invalid_oclc_fh, missing_oclc_fh, error_fh
+        date,
+        mat_source,
+        source_fh,
+        success_fh,
+        invalid_oclc_fh,
+        missing_oclc_fh,
+        error_fh,
     )
 
     click.echo("Report:")

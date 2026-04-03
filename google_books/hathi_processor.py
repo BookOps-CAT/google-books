@@ -188,6 +188,7 @@ def get_grin_report(shipment_date: datetime.date, mat_source: str) -> Path:
 
 def parse_hathi_processing_report(
     date: datetime.date,
+    mat_source: str,
     source_fh: Path,
     success_fh: Path,
     invalid_oclc_fh: Path,
@@ -200,6 +201,7 @@ def parse_hathi_processing_report(
 
     Args:
         date:               shipment date as `datetime.date` instance
+        mat_source:         source of the material (e.g. onsite, recap)
         source_fh:          path to MARCXML submitted to Hathi
         success_fh:         path for success report
         invalid_oclc_fh:    path for invalid location of OCLC # report
@@ -211,8 +213,11 @@ def parse_hathi_processing_report(
         and errors
     """
     success_count = 0
-    invalid_oclc_loc_count = 0
+    invalid_oclc_loc = set()
+    invalid_oclc_count = 0
+    missing_oclc = set()
     missing_oclc_count = 0
+    error_bibs = set()
     error_count = 0
 
     with open(source_fh, "r") as file:
@@ -224,36 +229,46 @@ def parse_hathi_processing_report(
             elif line.startswith("WARNING: .b"):
                 bibno = find_bibno(line)
                 if "OCLC number found in unspecified 035$" in line:
-                    save2csv(
-                        invalid_oclc_fh,
-                        ",",
-                        [bibno],
-                    )
-                    invalid_oclc_loc_count += 1
+                    invalid_oclc_count += 1
+                    invalid_oclc_loc.add(bibno)
                 elif "no OCLC number in record" in line:
-                    save2csv(
-                        missing_oclc_fh,
-                        ",",
-                        [bibno],
-                    )
                     missing_oclc_count += 1
+                    missing_oclc.add(bibno)
             elif line.startswith("ERROR"):
+                error_count += 1
                 bibno = find_bibno(line)
                 err_msg = find_err_msg(line)
-                save2csv(
-                    error_fh,
-                    ",",
-                    [
-                        bibno,
-                        f"{date}",
-                        "Zephir validation",
-                        f"nyp_{date}_google.xml",
-                        err_msg,
-                        "NO",
-                    ],
-                )
-                error_count += 1
-    return (success_count, invalid_oclc_loc_count, missing_oclc_count, error_count)
+                error_bibs.add((bibno, err_msg))
+
+    # save results
+    data = list(invalid_oclc_loc)
+    with invalid_oclc_fh.open("w", newline="\n") as inv_fh:
+        writer = csv.writer(inv_fh)
+        for bibno in sorted(data):
+            writer.writerow([bibno])
+
+    data = list(missing_oclc)
+    with missing_oclc_fh.open("w", newline="\n") as mis_fh:
+        writer = csv.writer(mis_fh)
+        for bibno in sorted(data):
+            writer.writerow([bibno])
+
+    data = list(error_bibs)
+    with error_fh.open("w", newline="\n") as err_fh:
+        writer = csv.writer(err_fh)
+        for row in sorted(data):
+            writer.writerow(
+                [
+                    row[0],
+                    f"{date}",
+                    "Zephir validation",
+                    f"nyp_{date}_google_{mat_source}.xml",
+                    row[1],
+                    "NO",
+                ]
+            )
+
+    return (success_count, len(invalid_oclc_loc), len(missing_oclc), len(error_bibs))
 
 
 def scannable(row: list[str]) -> bool:
