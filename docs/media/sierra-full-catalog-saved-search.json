@@ -1,0 +1,661 @@
+{
+  "queries": [
+    {
+      "target": {
+        "record": {
+          "type": "bib"
+        },
+        "field": {
+          "marcTag": "910"
+        }
+      },
+      "expr": {
+        "op": "has",
+        "operands": [
+          "rl",
+          ""
+        ]
+      }
+    },
+    "and",
+    {
+      "target": {
+        "record": {
+          "type": "bib"
+        },
+        "id": 30
+      },
+      "expr": {
+        "op": "regex",
+        "operands": [
+          "[acdl]",
+          ""
+        ]
+      }
+    },
+    "and",
+    {
+      "target": {
+        "record": {
+          "type": "item"
+        },
+        "id": 60
+      },
+      "expr": {
+        "op": "not_equal",
+        "operands": [
+          "p",
+          ""
+        ]
+      }
+    },
+    "and",
+    [
+      {
+        "target": {
+          "record": {
+            "type": "item"
+          },
+          "id": 61
+        },
+        "expr": {
+          "op": "between",
+          "operands": [
+            "0",
+            "5"
+          ]
+        }
+      },
+      "or",
+      {
+        "target": {
+          "record": {
+            "type": "item"
+          },
+          "id": 61
+        },
+        "expr": {
+          "op": "equals",
+          "operands": [
+            "7",
+            ""
+          ]
+        }
+      },
+      "or",
+      {
+        "target": {
+          "record": {
+            "type": "item"
+          },
+          "id": 61
+        },
+        "expr": {
+          "op": "between",
+          "operands": [
+            "44",
+            "49"
+          ]
+        }
+      },
+      "or",
+      {
+        "target": {
+          "record": {
+            "type": "item"
+          },
+          "id": 61
+        },
+        "expr": {
+          "op": "between",
+          "operands": [
+            "54",
+            "60"
+          ]
+        }
+      },
+      "or",
+      {
+        "target": {
+          "record": {
+            "type": "item"
+          },
+          "id": 61
+        },
+        "expr": {
+          "op": "between",
+          "operands": [
+            "62",
+            "65"
+          ]
+        }
+      },
+      "or",
+      {
+        "target": {
+          "record": {
+            "type": "item"
+          },
+          "id": 61
+        },
+        "expr": {
+          "op": "equals",
+          "operands": [
+            "67",
+            ""
+          ]
+        }
+      },
+      "or",
+      {
+        "target": {
+          "record": {
+            "type": "item"
+          },
+          "id": 61
+        },
+        "expr": {
+          "op": "between",
+          "operands": [
+            "77",
+            "78"
+          ]
+        }
+      }
+    ],
+    "and",
+    {
+      "target": {
+        "record": {
+          "type": "item"
+        },
+        "id": 88
+      },
+      "expr": {
+        "op": "regex",
+        "operands": [
+          "[^dlnw$]",
+          ""
+        ]
+      }
+    },
+    "and",
+    [
+      {
+        "target": {
+          "record": {
+            "type": "item"
+          },
+          "id": 79
+        },
+        "expr": {
+          "op": "regex",
+          "operands": [
+            "^bu",
+            ""
+          ]
+        }
+      },
+      "or",
+      [
+        {
+          "target": {
+            "record": {
+              "type": "item"
+            },
+            "id": 79
+          },
+          "expr": {
+            "op": "regex",
+            "operands": [
+              "^ma",
+              ""
+            ]
+          }
+        },
+        "and_not",
+        {
+          "target": {
+            "record": {
+              "type": "item"
+            },
+            "id": 79
+          },
+          "expr": {
+            "op": "regex",
+            "operands": [
+              "^maq",
+              ""
+            ]
+          }
+        },
+        "and_not",
+        {
+          "target": {
+            "record": {
+              "type": "item"
+            },
+            "id": 79
+          },
+          "expr": {
+            "op": "regex",
+            "operands": [
+              "^mar",
+              ""
+            ]
+          }
+        },
+        "and",
+        {
+          "target": {
+            "record": {
+              "type": "item"
+            },
+            "id": 79
+          },
+          "expr": {
+            "op": "not_equal",
+            "operands": [
+              "mabb1",
+              ""
+            ]
+          }
+        },
+        "and",
+        {
+          "target": {
+            "record": {
+              "type": "item"
+            },
+            "id": 79
+          },
+          "expr": {
+            "op": "not_equal",
+            "operands": [
+              "mabb3",
+              ""
+            ]
+          }
+        },
+        "and",
+        {
+          "target": {
+            "record": {
+              "type": "item"
+            },
+            "id": 79
+          },
+          "expr": {
+            "op": "not_equal",
+            "operands": [
+              "mac82",
+              ""
+            ]
+          }
+        },
+        "and",
+        {
+          "target": {
+            "record": {
+              "type": "item"
+            },
+            "id": 79
+          },
+          "expr": {
+            "op": "not_equal",
+            "operands": [
+              "macc2",
+              ""
+            ]
+          }
+        },
+        "and",
+        {
+          "target": {
+            "record": {
+              "type": "item"
+            },
+            "id": 79
+          },
+          "expr": {
+            "op": "not_equal",
+            "operands": [
+              "maee2",
+              ""
+            ]
+          }
+        },
+        "and",
+        {
+          "target": {
+            "record": {
+              "type": "item"
+            },
+            "id": 79
+          },
+          "expr": {
+            "op": "not_equal",
+            "operands": [
+              "makk3",
+              ""
+            ]
+          }
+        },
+        "and",
+        {
+          "target": {
+            "record": {
+              "type": "item"
+            },
+            "id": 79
+          },
+          "expr": {
+            "op": "not_equal",
+            "operands": [
+              "mao82",
+              ""
+            ]
+          }
+        },
+        "and",
+        {
+          "target": {
+            "record": {
+              "type": "item"
+            },
+            "id": 79
+          },
+          "expr": {
+            "op": "not_equal",
+            "operands": [
+              "mao92",
+              ""
+            ]
+          }
+        },
+        "and",
+        {
+          "target": {
+            "record": {
+              "type": "item"
+            },
+            "id": 79
+          },
+          "expr": {
+            "op": "not_equal",
+            "operands": [
+              "maor2",
+              ""
+            ]
+          }
+        },
+        "and",
+        {
+          "target": {
+            "record": {
+              "type": "item"
+            },
+            "id": 79
+          },
+          "expr": {
+            "op": "not_equal",
+            "operands": [
+              "mapp1",
+              ""
+            ]
+          }
+        },
+        "and",
+        {
+          "target": {
+            "record": {
+              "type": "item"
+            },
+            "id": 79
+          },
+          "expr": {
+            "op": "not_equal",
+            "operands": [
+              "mapp2",
+              ""
+            ]
+          }
+        },
+        "and",
+        {
+          "target": {
+            "record": {
+              "type": "item"
+            },
+            "id": 79
+          },
+          "expr": {
+            "op": "not_equal",
+            "operands": [
+              "mapp3",
+              ""
+            ]
+          }
+        },
+        "and",
+        {
+          "target": {
+            "record": {
+              "type": "item"
+            },
+            "id": 79
+          },
+          "expr": {
+            "op": "not_equal",
+            "operands": [
+              "masu2",
+              ""
+            ]
+          }
+        },
+        "and_not",
+        {
+          "target": {
+            "record": {
+              "type": "item"
+            },
+            "id": 79
+          },
+          "expr": {
+            "op": "regex",
+            "operands": [
+              "^mau",
+              ""
+            ]
+          }
+        }
+      ],
+      "or",
+      {
+        "target": {
+          "record": {
+            "type": "item"
+          },
+          "id": 79
+        },
+        "expr": {
+          "op": "regex",
+          "operands": [
+            "^pa",
+            ""
+          ]
+        }
+      },
+      "or",
+      [
+        {
+          "target": {
+            "record": {
+              "type": "item"
+            },
+            "id": 79
+          },
+          "expr": {
+            "op": "regex",
+            "operands": [
+              "^sc$",
+              ""
+            ]
+          }
+        },
+        "or",
+        {
+          "target": {
+            "record": {
+              "type": "item"
+            },
+            "id": 79
+          },
+          "expr": {
+            "op": "regex",
+            "operands": [
+              "^sc[abef]$",
+              ""
+            ]
+          }
+        },
+        "or",
+        {
+          "target": {
+            "record": {
+              "type": "item"
+            },
+            "id": 79
+          },
+          "expr": {
+            "op": "regex",
+            "operands": [
+              "^sc[abe]",
+              ""
+            ]
+          }
+        },
+        "or",
+        {
+          "target": {
+            "record": {
+              "type": "item"
+            },
+            "id": 79
+          },
+          "expr": {
+            "op": "equals",
+            "operands": [
+              "scff2",
+              ""
+            ]
+          }
+        },
+        "and",
+        {
+          "target": {
+            "record": {
+              "type": "item"
+            },
+            "id": 79
+          },
+          "expr": {
+            "op": "not_equal",
+            "operands": [
+              "scee2",
+              ""
+            ]
+          }
+        }
+      ],
+      "or",
+      [
+        {
+          "target": {
+            "record": {
+              "type": "item"
+            },
+            "id": 79
+          },
+          "expr": {
+            "op": "regex",
+            "operands": [
+              "^rc",
+              ""
+            ]
+          }
+        },
+        "and",
+        {
+          "target": {
+            "record": {
+              "type": "item"
+            },
+            "id": 79
+          },
+          "expr": {
+            "op": "not_equal",
+            "operands": [
+              "rcmi2",
+              ""
+            ]
+          }
+        }
+      ]
+    ],
+    "and",
+    {
+      "target": {
+        "record": {
+          "type": "item"
+        },
+        "field": {
+          "tag": "x"
+        }
+      },
+      "expr": {
+        "op": "all_fields_not_have",
+        "operands": [
+          "google",
+          ""
+        ]
+      }
+    },
+    "and",
+    {
+      "target": {
+        "record": {
+          "type": "item"
+        },
+        "field": {
+          "tag": "x"
+        }
+      },
+      "expr": {
+        "op": "all_fields_not_have",
+        "operands": [
+          "poor condition",
+          ""
+        ]
+      }
+    },
+    "and",
+    {
+      "target": {
+        "record": {
+          "type": "item"
+        },
+        "field": {
+          "tag": "x"
+        }
+      },
+      "expr": {
+        "op": "all_fields_not_have",
+        "operands": [
+          "schomburg collection",
+          ""
+        ]
+      }
+    }
+  ]
+}
