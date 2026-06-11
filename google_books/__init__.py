@@ -18,7 +18,6 @@ from google_books.picklist import (
 )
 from google_books.utils import get_directory, shipment_date_obj
 
-
 __version__ = "0.1.0"
 
 
@@ -187,20 +186,24 @@ def clean_candidates_sierra_export(filename: str, date: str) -> None:
 
 @cli.command()
 @click.argument("shipment_date")
-def hathi_urls(shipment_date: str, parent_dir: str = "files/shipments") -> None:
+@click.argument("mat_source")
+def hathi_urls(
+    shipment_date: str, mat_source: str, parent_dir: str = "files/shipments"
+) -> None:
     """
     Creates stub MARC21 records with generated 856 for HathiTrust URLs based
     on files in the shipment folder.
 
     Args:
         shipment_date:      shipment_date:  date in the format YYYYMMDD
+        mat_source:         material source ('onsite' or 'recap')
 
     """
     date = shipment_date_obj(shipment_date)
-    shipment_dir = Path(f"{parent_dir}/{date:%Y-%m-%d}")
-    submitted_fh = shipment_dir / f"nyp_{date:%Y%m%d}_google.xml"
-    errors_fh = shipment_dir / f"nyp_{date:%Y%m%d}_google_error.xml"
-    out_fh = shipment_dir / f"hathi-stub-urls_{date:%Y%m%d}.mrc"
+    shipment_dir = Path(f"{parent_dir}/{date:%Y-%m-%d}_{mat_source}")
+    submitted_fh = shipment_dir / f"nyp_{date:%Y%m%d}_google_{mat_source}.xml"
+    errors_fh = shipment_dir / f"nyp_{date:%Y%m%d}_google_{mat_source}_error.xml"
+    out_fh = shipment_dir / f"hathi-stub-urls_{date:%Y%m%d}_{mat_source}.mrc"
 
     create_stub_hathi_records(submitted_fh, errors_fh, out_fh)
     click.echo(f"Stub MARC records with Hathi URLs were saved to `{out_fh}`.")

@@ -142,7 +142,7 @@ def get_hathi_meta_destination(shipment_date: datetime.date, mat_source: str) ->
     """
     return Path(
         f"files/shipments/{shipment_date:%Y-%m-%d}_{mat_source}/"
-        f"nyp_{shipment_date:%Y%m%d}_google.xml"
+        f"nyp_{shipment_date:%Y%m%d}_google_{mat_source}.xml"
     )
 
 
