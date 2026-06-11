@@ -156,7 +156,7 @@ def onsite_manifest(shipment_date: str) -> None:
 @cli.command()
 @click.argument("tar_file", type=click.Path(exists=True))
 @click.argument("list_size", type=int, default=200000)
-def unpack_candidate_items(tar_file: str, list_size: int) -> None:
+def get_candidate_items(tar_file: str, list_size: int) -> None:
     """
     Prepares the item list for Sierra based on Google Candidate list _combined
     tar file. Creates `nypl-YYYY-MM-DD-candidate-items.csv` file with item numbers
