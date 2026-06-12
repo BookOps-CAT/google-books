@@ -11,6 +11,8 @@ import re
 
 from google_books.utils import fh_date, save2csv
 
+csv.field_size_limit(2147483647)
+
 SIERRA_EXPORT_FIELDS = [
     "RECORD #(ITEM)",
     "ICODE2",
@@ -59,7 +61,7 @@ def prep_item_list_for_sierra(tar_file: str, list_size: int) -> None:
         tar_file (str): The tar file containing the candidate list.
         list_size (int): The number of items to include in the list.
     """
-    date = fh_date(tar_file)
+    date = "20260514"
 
     extract_candidate_list(tar_file)
 
@@ -76,9 +78,14 @@ def prep_item_list_for_sierra(tar_file: str, list_size: int) -> None:
                 n = 0
                 s += 1
                 print(f"Outputting to file: {str(s).zfill(3)}...")
-            item = row[1][1:]
-            out = f"files/picklist/nypl-{date}-candidate-items-{str(s).zfill(3)}.csv"
-            save2csv(out, ",", [item])
+            try:
+                item = row[24][1:]
+                out = (
+                    f"files/picklist/nypl-{date}-candidate-items-{str(s).zfill(3)}.csv"
+                )
+                save2csv(out, ",", [item])
+            except IndexError:
+                print(f"Error in row {n} of file {f}. Row has {len(row)} columns.")
 
 
 def too_tall(value: str) -> bool:
@@ -209,3 +216,20 @@ def prep_sierra_export_for_dataframe(fh: str, date: str) -> None:
                 "\t",
                 new_row,
             )
+
+
+if __name__ == "__main__":
+    # file = "files/picklist/nypl-2026-05-14_combined-019.txt"
+    # with open(file, "r", encoding="utf-8") as f:
+    #     reader = csv.reader(f, delimiter="\t")
+    #     found = False
+    #     for n, row in enumerate(reader):
+    #         try:
+    #             item = row[24]
+    #         except IndexError:
+    #             print(f"Error in row {n}")
+    #             print(len(row))
+    #     print(f"total rows: {n}")
+
+    with tarfile.open("files/picklist/nypl-2026-05-14_combined.tar.gz", "r") as tar:
+        tar.extractall("files/picklist")
