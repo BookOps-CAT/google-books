@@ -54,7 +54,13 @@ def fh_date(fh: Union[str, Path]) -> Optional[str]:
     if match:
         return match.group(2)
     else:
-        return None
+        # handling of the Google candidate list naming convention
+        pattern = re.compile(r"^(.*-)(\d{4}-\d{2}-\d{2})(_.*)$")
+        match = re.search(pattern, fh_name)
+        if match:
+            return match.group(2).replace("-", "")
+        else:
+            return None
 
 
 def shipment_date_obj(shipment_date: str) -> datetime.date:

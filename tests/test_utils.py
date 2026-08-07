@@ -52,6 +52,7 @@ def test_save2csv_unicode_encode_error(tmp_path):
         ("SierraExport4Google_20240131.mrc", "20240131"),
         ("SierraExport4Google_202401316.mrc", None),
         ("files/shipments/20241208_recap/google_export.txt", None),
+        ("nypl-2026-05-14_combined.tar.gz", "20260514"),
     ],
 )
 def test_fh_date(arg, expectation):

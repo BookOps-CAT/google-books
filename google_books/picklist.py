@@ -61,7 +61,7 @@ def prep_item_list_for_sierra(tar_file: str, list_size: int) -> None:
         tar_file (str): The tar file containing the candidate list.
         list_size (int): The number of items to include in the list.
     """
-    date = "20260514"
+    date = fh_date(tar_file)
 
     extract_candidate_list(tar_file)
 
@@ -216,20 +216,3 @@ def prep_sierra_export_for_dataframe(fh: str, date: str) -> None:
                 "\t",
                 new_row,
             )
-
-
-if __name__ == "__main__":
-    # file = "files/picklist/nypl-2026-05-14_combined-019.txt"
-    # with open(file, "r", encoding="utf-8") as f:
-    #     reader = csv.reader(f, delimiter="\t")
-    #     found = False
-    #     for n, row in enumerate(reader):
-    #         try:
-    #             item = row[24]
-    #         except IndexError:
-    #             print(f"Error in row {n}")
-    #             print(len(row))
-    #     print(f"total rows: {n}")
-
-    with tarfile.open("files/picklist/nypl-2026-05-14_combined.tar.gz", "r") as tar:
-        tar.extractall("files/picklist")
