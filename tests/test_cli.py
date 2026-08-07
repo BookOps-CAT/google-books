@@ -34,10 +34,10 @@ def test_new_shipment_invalid_mat_source(tmp_path):
         s.mkdir()
 
         result = runner.invoke(cli, ["new-shipment", "19991231", "foobar"])
-        assert result.exit_code == 0
+        assert result.exit_code == 2
         assert (
-            result.output
-            == "Invalid material source argument. Please use 'onsite' or 'recap'.\n"
+            "Invalid value for '{onsite|recap}': 'foobar' is not one of 'onsite', 'recap'"
+            in result.output
         )
 
         # verify that no new directory was created

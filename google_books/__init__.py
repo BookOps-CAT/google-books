@@ -21,6 +21,9 @@ from google_books.utils import get_directory, shipment_date_obj
 __version__ = "0.1.0"
 
 
+MAT_SOURCES = ["onsite", "recap"]
+
+
 @click.group()
 def cli() -> None:
     pass
@@ -28,7 +31,7 @@ def cli() -> None:
 
 @cli.command()
 @click.argument("shipment_date")
-@click.argument("mat_source")
+@click.argument("mat_source", type=click.Choice(MAT_SOURCES, case_sensitive=False))
 @click.argument("parent_dir", type=click.Path(), default="files/shipments")
 def hathi_report(shipment_date: str, mat_source: str, parent_dir: str) -> None:
     """
@@ -62,7 +65,7 @@ def hathi_report(shipment_date: str, mat_source: str, parent_dir: str) -> None:
 
 @cli.command()
 @click.argument("shipment_date")
-@click.argument("mat_source")
+@click.argument("mat_source", type=click.Choice(MAT_SOURCES, case_sensitive=False))
 def hathi_metadata_prep(shipment_date: str, mat_source: str) -> None:
     """
     Preps HathiTrust MARCXML file using GRIN's Advanced Search report by
@@ -82,7 +85,7 @@ def hathi_metadata_prep(shipment_date: str, mat_source: str) -> None:
 
 @cli.command()
 @click.argument("shipment_date")
-@click.argument("mat_source")
+@click.argument("mat_source", type=click.Choice(MAT_SOURCES, case_sensitive=False))
 @click.argument("parent_dir", type=click.Path(), default="files/shipments")
 def new_shipment(shipment_date: str, mat_source: str, parent_dir: str):
     """
@@ -186,7 +189,7 @@ def clean_candidates_sierra_export(filename: str, date: str) -> None:
 
 @cli.command()
 @click.argument("shipment_date")
-@click.argument("mat_source")
+@click.argument("mat_source", type=click.Choice(MAT_SOURCES, case_sensitive=False))
 def hathi_urls(
     shipment_date: str, mat_source: str, parent_dir: str = "files/shipments"
 ) -> None:
